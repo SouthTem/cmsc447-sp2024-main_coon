@@ -1,14 +1,25 @@
 from flask import Flask, g, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
-from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
+from typing import List
 
 default_error_message = "Something has gone wrong. Is the URL incorrect?"
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 db = SQLAlchemy(app)
+
+unlocked_outfit = Table("unlocked_outfit", db.Model.metadata,
+                      Column("player_id", ForeignKey("player.id"), primary_key=True),
+                      Column("outfit_id", ForeignKey("outfit.id"), primary_key=True),
+                      )
+
+unlocked_level = Table("unlocked_level", db.Model.metadata,
+                      Column("player_id", ForeignKey("player.id"), primary_key=True),
+                      Column("level_id", ForeignKey("level.id"), primary_key=True),
+                      )
 
 class UserAccount(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -21,6 +32,20 @@ class Player(db.Model):
     coins: Mapped[int] = mapped_column(nullable=False, default=0)
 
     account_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"), unique=True)
+    outfits: Mapped[list['Outfit']] = relationship(secondary=unlocked_outfit)
+    levels: Mapped[list['Level']] = relationship(secondary=unlocked_level)
+
+class Outfit(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    cost: Mapped[int] = mapped_column(nullable=False, default=0)
+    texture: Mapped[str] = mapped_column(nullable=False)
+
+class Level(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+    difficulty: Mapped[int] = mapped_column(nullable=False, default=0)
+
 
 @app.teardown_appcontext
 def close_connection(exception):
@@ -31,9 +56,20 @@ def close_connection(exception):
 @app.route('/')
 def index():
     db.create_all()
+
+    out1 = Outfit(name="cool outfit", cost=120, texture='test.png')
+    out2 = Outfit(name="cooler outfit", cost=140, texture='test2.png')
+    out3 = Outfit(name="coolest outfit", cost=200, texture='test3.png')
+
+    db.session.add_all([out1, out2, out3])
+
     account = UserAccount(username="test", password="pass")
 
-    player = Player(user_account=account)
+    player:Player = Player(user_account=account)
+    player.outfits.append(out1)
+    player.outfits.append(out2)
+
+    print(player.outfits)
 
     account2 = UserAccount(username="test2", password="pass")
 
