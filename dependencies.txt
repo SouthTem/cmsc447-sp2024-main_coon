@@ -2,3 +2,4 @@ flask
 sqlite3
 flask-sqlalchemy
 virtualenv
+flask-bcrypt

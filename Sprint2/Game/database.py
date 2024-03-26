@@ -2,10 +2,14 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship, DeclarativeBase
-from typing import List
+from sqlalchemy.orm.exc import MultipleResultsFound
+from typing import List, Iterator, Callable 
 import datetime
+from flask_bcrypt import Bcrypt
 
+# These get linked with the app in app.py
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 unlocked_outfit = Table("unlocked_outfit", db.Model.metadata,
                       Column("player_id", ForeignKey("player.id"), primary_key=True),
@@ -22,6 +26,35 @@ class UserAccount(db.Model):
     username: Mapped[str] = mapped_column(unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     player: Mapped['Player'] = relationship(backref="user_account")
+
+    def __init__(self, username:str, password:str):
+        super().__init__()
+        self.username = username
+        self.create_password(password)
+
+    def create_password(self, raw_password:str):
+        self.password = bcrypt.generate_password_hash(raw_password).decode('utf-8')
+
+    def check_password(self, raw_password:str):
+        return bcrypt.check_password_hash(pw_hash=self.password, password=raw_password)
+
+    @staticmethod
+    def get_account(username:str, password:str):
+        matching_username = UserAccount.query.filter_by(username=username)
+
+        matching_password = []
+        curr:UserAccount = None
+        for curr in matching_username:
+            if curr.check_password(password):
+                matching_password.append(curr)
+
+        if len(matching_password) > 1:
+            raise MultipleResultsFound()
+        elif len(matching_password) == 0:
+            return None
+        else:
+            return matching_password[0]
+        
 
 class Player(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

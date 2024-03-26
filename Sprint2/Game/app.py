@@ -1,12 +1,14 @@
 from flask import Flask, g, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from database import setup, db
+from database import setup, db, bcrypt
+import database
 
 default_error_message = "Something has gone wrong. Is the URL incorrect?"
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 db.init_app(app)
+bcrypt.init_app(app)
 
 
 @app.teardown_appcontext
@@ -17,7 +19,9 @@ def close_connection(exception):
 
 @app.route('/')
 def index():
-    setup()
+    #setup()
+    ac = database.UserAccount.get_account("test2", "pass")
+    print(ac)
 
     return render_template("index.html")
 
