@@ -55,6 +55,9 @@ class UserAccount(db.Model):
         else:
             return matching_password[0]
         
+    def __str__(self) -> str:
+        return f"UserAccount: id={self.id}, username={self.username}"
+        
 
 class Player(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -65,16 +68,25 @@ class Player(db.Model):
     levels: Mapped[list['Level']] = relationship(secondary=unlocked_level)
     runs: Mapped[list['Run']] = relationship(backref="player")
 
+    def __str__(self) -> str:
+        return f"Player: id={self.id}, coins={self.coins}"
+
 class Outfit(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     cost: Mapped[int] = mapped_column(nullable=False, default=0)
     texture: Mapped[str] = mapped_column(nullable=False)
 
+    def __str__(self) -> str:
+        return f"Outfit: id={self.id}, name={self.name}, cost={self.cost}, texture={self.texture}"
+
 class Level(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     difficulty: Mapped[int] = mapped_column(nullable=False, default=0)
+
+    def __str__(self) -> str:
+        return f"Level: id={self.id}, name={self.difficulty}, difficulty={self.difficulty}"
 
 class Run(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -84,6 +96,9 @@ class Run(db.Model):
 
     level_id: Mapped[int] = mapped_column(ForeignKey("level.id"))
     player_id : Mapped[int] = mapped_column(ForeignKey("player.id"))
+
+    def __str__(self) -> str:
+        return f"Run: id={self.id}, create_time={self.create_time}, points={self.points}, coins={self.coins}"
 
 
 def setup():
