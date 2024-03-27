@@ -21,6 +21,11 @@ unlocked_level = Table("unlocked_level", db.Model.metadata,
                       Column("level_id", ForeignKey("level.id"), primary_key=True),
                       )
 
+player_run = Table("player_run", db.Model.metadata,
+                      Column("run_id", ForeignKey("run.id"), primary_key=True),
+                      Column("player_id", ForeignKey("player.id"), primary_key=True),
+                      )
+
 class UserAccount(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(unique=True, nullable=False)
@@ -66,7 +71,7 @@ class Player(db.Model):
     account_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"), unique=True)
     outfits: Mapped[list['Outfit']] = relationship(secondary=unlocked_outfit)
     levels: Mapped[list['Level']] = relationship(secondary=unlocked_level)
-    runs: Mapped[list['Run']] = relationship(backref="player")
+    runs: Mapped[list['Run']] = relationship(secondary=player_run)
 
     def __str__(self) -> str:
         return f"Player: id={self.id}, coins={self.coins}"
@@ -95,7 +100,6 @@ class Run(db.Model):
     coins: Mapped[int] = mapped_column(nullable=False, default=0)
 
     level_id: Mapped[int] = mapped_column(ForeignKey("level.id"))
-    player_id : Mapped[int] = mapped_column(ForeignKey("player.id"))
 
     def __str__(self) -> str:
         return f"Run: id={self.id}, create_time={self.create_time}, points={self.points}, coins={self.coins}"
@@ -139,11 +143,15 @@ def setup():
 
     print(a1.player)
 
-    run1 = Run(points=12, coins=20, level_id=lev1.id, player_id=player.id)
-    run2 = Run(points=120, coins=120, level_id=lev1.id, player_id=player2.id)
-    run3 = Run(points=192, coins=920, level_id=lev3.id, player_id=player.id)
+    run1 = Run(points=12, coins=20, level_id=lev1.id)
+    run2 = Run(points=120, coins=120, level_id=lev1.id)
+    run3 = Run(points=192, coins=920, level_id=lev3.id)
 
     db.session.add_all([run1, run2, run3])
+
+    player.runs.append(run1)
+    player2.runs.append(run2)
+    player2.runs.append(run3)
 
     print(player.runs)
 

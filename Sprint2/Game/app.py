@@ -19,9 +19,9 @@ def close_connection(exception):
 
 @app.route('/')
 def index():
-    #setup()
-    ac = database.UserAccount.get_account("test2", "pass")
-    print(ac)
+    setup()
+    #ac = database.UserAccount.get_account("test2", "pass")
+    #print(ac)
 
     return render_template("index.html")
 
