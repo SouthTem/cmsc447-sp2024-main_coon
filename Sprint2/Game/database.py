@@ -44,7 +44,7 @@ class UserAccount(db.Model):
         return bcrypt.check_password_hash(pw_hash=self.password, password=raw_password)
 
     @staticmethod
-    def get_account(username:str, password:str):
+    def get_account(username:str, password:str) -> 'UserAccount':
         matching_username = UserAccount.query.filter_by(username=username)
 
         matching_password = []
