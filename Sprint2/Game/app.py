@@ -17,9 +17,6 @@ jwt = JWTManager(app)
 db.init_app(app)
 bcrypt.init_app(app)
 
-logged_in_account = None
-
-
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -60,6 +57,10 @@ def add_run():
         player:database.Player = database.Player.query.filter_by(id=current_account_id).one_or_none()
 
         if player is not None:
+            valid_level = database.Level.query.filter_by(id=level_id).count() == 1
+            if not valid_level:
+                raise ValueError('level id was invalid')
+            
             new_run:database.Run = database.Run(points=points, coins=coins, level_id=level_id)
             player.runs.append(new_run)
             database.db.session.commit()

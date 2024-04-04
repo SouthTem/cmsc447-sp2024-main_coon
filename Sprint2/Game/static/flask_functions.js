@@ -2,6 +2,10 @@ const LOGIN_ENDPOINT = "/login";
 const RUN_ENDPOINT = "/run";
 const COIN_ENDPOINT = "/update_coins"
 
+/**
+ * Gets the auth token from storage
+ * @returns The access token in session storage or null if none is found
+ */
 function get_token()
 {
     return sessionStorage.getItem('access_token');
@@ -34,7 +38,7 @@ function login(username, password)
             throw new Error(`Expected a json response from ${LOGIN_ENDPOINT}`);
 
         if (!response.ok) 
-            throw new Error(`Response from ${LOGIN_ENDPOINT} was no ok`);
+            throw new Error(`Response from ${LOGIN_ENDPOINT} was not ok`);
         
         return response.json();
     })
@@ -68,6 +72,12 @@ function addRun(points, coins, levelId)
 
     token = get_token();
 
+    // can't do anything if token is null
+    if (token == null)
+    {
+        return;
+    }
+
     fetch(RUN_ENDPOINT, {
         method: "POST",
         headers: {
@@ -83,7 +93,7 @@ function addRun(points, coins, levelId)
         if (!response.ok)
         {
             console.warn(response.json())
-            throw new Error(`Response from ${RUN_ENDPOINT} was no ok`);
+            throw new Error(`Response from ${RUN_ENDPOINT} was not ok`);
         }
 
         
@@ -111,6 +121,12 @@ function addCoins(coins)
 
     const token = get_token()
 
+    // can't do anything if token is null
+    if (token == null)
+    {
+        return;
+    }
+
     fetch(COIN_ENDPOINT, {
         method: "POST",
         headers: {
@@ -124,7 +140,7 @@ function addCoins(coins)
             throw new Error(`Expected a json response from ${COIN_ENDPOINT}`);
 
         if (!response.ok) 
-            throw new Error(`Response from ${COIN_ENDPOINT} was no ok`);
+            throw new Error(`Response from ${COIN_ENDPOINT} was not ok`);
         
         return response.json();
     })
