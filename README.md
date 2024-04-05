@@ -1,6 +1,6 @@
 How to Run:
 
-Navigate to the cmsc447-hw2-sp2024-Chowdhury-Sumair.venv directory while in terminal and activate the virtual environment with ".\Scripts\activate"
+Navigate to the .venv directory while in terminal and activate the virtual environment with ".\Scripts\activate"
 
 Start the application with the "flask run" command or "python app.py" command when in the virtual environment (indicated by "(.venv)")
 
