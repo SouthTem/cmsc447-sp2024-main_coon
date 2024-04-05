@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+  <title>Maine Coone Game</title>
+</head>
+<body>
+
+  <!-- Navigation Menu -->
+  <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+      <a href="#" class="navbar-brand">Maine Coone UMBC Game</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navcol">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navcol">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('create') }}" class="nav-link">Add Score Manually</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('score') }}" class="nav-link">See High Scores</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!--Data Section-->
+  <section class="bg-secondary text-light p-5 text-center text-sm-start">
+    <div class="container">
+        <div class="d-sm-flex allign-items-center justify-content-between">
+            <div class ="row">
+                <div class="col md-12">
+                    <h2>Scoreboard</h2>
+                    <!--Search Bar-->
+                    <div class ="input-group">
+                        <div class="form-outline" data-mdb-input-init>
+                            <input placeholder="Search by Name" class="form-control" type="search" name="search" id="search">
+                        </div>
+                    </div>
+
+                    <!--Create User Button to Create a new User-->
+                    <form action="{{ url_for('create') }}" method ="GET">
+                        <input class="btn btn-primary" type ="submit" value="Add Score">
+                    </form>
+                    <!--Table for DB-->
+                    <table
+                    style ="font-size:200%" 
+                    class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Score</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in scoreTab %}
+                            <tr>
+                                <td>{{ data['username'] }}</td>
+                                <td>{{ data['score'] }}</td>
+                                <td><form action="{{ url_for('update', id_1=data['id_1']) }}" method ="GET">
+                                    <input class="btn btn-outline-secondary" type ="submit" value="Edit"></form></td>
+                                <td><form action="{{ url_for('delete', id_1=data['id_1']) }}" method="POST">
+                                    <input class="btn btn-outline-danger" type ="submit" value="Delete User"
+                                        onclick="return confirm('Delete this User?')">
+                                </form></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!--Script to have working search bar-->
+                    <script>
+                        const searchInp = document.getElementById("search");
+                        const rows = document.querySelectorAll("tbody tr");
+                        //console.log(rows);
+                        searchInp.addEventListener("keyup", function (event) {
+                         const q = event.target.value.toLowerCase();
+                         rows.forEach((row) => {    //simple search forEach
+                             row.querySelector("td").textContent.toLowerCase().startsWith(q) 
+                             ? (row.style.display = "") 
+                             : (row.style.display = "none");
+                         });
+                        });
+                    </script>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+
+</html>
