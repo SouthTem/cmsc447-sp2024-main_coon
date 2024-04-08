@@ -1,44 +1,33 @@
-<!doctype html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8" />
-    <title>Game</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-</head>
+{% block head_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.js"></script>
+{% endblock %}
 
-<body>
+{% block title %}Game{% endblock %}
 
-    <div class="container bg-secondary-subtle text-center">
+{% block body %}
 
-        <div class="container bg-dark text-center">
-            <h1 class="fw-bold text-white">CMSC 447 GAME</h1>
-        </div>
+<div class="container bg-secondary-subtle text-center">
 
-        <button onclick="login('test', 'pass')" type="submit" class="btn btn-secondary">Login</button>
-
-        <button onclick="addCoins(10)" type="submit" class="btn btn-secondary">Coins</button>
-
-        <button onclick="addRun(10, 10, 1)" type="submit" class="btn btn-secondary">Run</button>
-
-        <div class="container text-center" id="game-div">
-
-        </div>
+    <div class="container bg-dark text-center">
+        <h1 class="fw-bold text-white">CMSC 447 GAME</h1>
     </div>
 
-    <script src="static/game.js"></script>
-    <script src="static/flask_functions.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"></script>
-</body>
+    <button onclick="login('test', 'pass')" type="submit" class="btn btn-secondary">Login</button>
 
-</html>
+    <button onclick="addCoins(10)" type="submit" class="btn btn-secondary">Coins</button>
+
+    <button onclick="addRun(10, 10, 1)" type="submit" class="btn btn-secondary">Run</button>
+
+    <div class="container text-center" id="game-div">
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="static/game.js"></script>
+<script src="static/flask_functions.js"></script>
+{% endblock %}

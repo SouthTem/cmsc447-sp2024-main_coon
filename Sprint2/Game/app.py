@@ -43,6 +43,26 @@ def login():
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'message': str(e)}), 400
+
+# TODO: sort the data by score, only display the best scores, all filtering/sorting
+@app.route('/leaderboard', methods=['GET'])
+def leaderboard():
+    data = []
+    player:database.Player = None
+    for player in database.Player.query.all():
+        entry = []
+        player_account:database.UserAccount = database.UserAccount.query.get(ident=player.account_id)
+        entry.append(player_account.username)
+        
+        run:database.Run = None
+        for run in player.runs:
+            entry.append(run.points)
+            entry.append(run.coins)
+
+        if run is not None:
+            data.append(entry)
+
+    return render_template('scoreboard.html', data=data)
     
 @app.route('/run', methods=['POST'])
 @jwt_required()
