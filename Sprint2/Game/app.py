@@ -23,6 +23,34 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+@app.route('/login_page', methods=['POST', 'GET'])
+def login_page():
+    try:
+        if request.method == "POST":
+
+            username = request.form.get('username')
+            password = request.form.get('password')
+
+            print(username, password)
+
+            account = database.UserAccount.get_account(username=username, password=password)
+
+            print(account)
+            if account is not None:
+                token = create_access_token(identity=account.id)
+                print("token:", token)
+                # TODO: redirect to the game
+                return "Login Successful"
+            else:
+                # no account is found, either the input is bad, or a new account needs to be created
+                return render_template('login.html')
+        
+        if request.method == "GET":
+            return render_template('login.html')
+    except Exception as e:
+        print(e)
+        return "Something went wrong"
+
 @app.route('/login', methods=['POST'])
 def login():
 
