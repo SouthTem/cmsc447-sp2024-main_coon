@@ -23,6 +23,39 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    try:
+        if request.method == "POST":
+
+            username = request.form.get('username')
+            password = request.form.get('password')
+
+            print(username, password)
+            
+            if database.UserAccount.query.filter_by(username=username).count() > 0:
+                return "username is already taken"
+
+            account:database.UserAccount = database.UserAccount(username=username, password=password)
+            
+            player:database.Player = database.Player(user_account=account)
+
+            print(account)
+            database.db.session.add_all([account, player])
+
+            database.db.session.commit()
+
+            token = create_access_token(identity=account.id)
+
+            return 'Account Created'
+        
+        if request.method == "GET":
+            return render_template('create.html')
+        
+    except Exception as e:
+        print(e)
+        return "Something went wrong"
+
 @app.route('/login_page', methods=['POST', 'GET'])
 def login_page():
     try:
@@ -84,11 +117,12 @@ def leaderboard():
         
         run:database.Run = None
         for run in player.runs:
+            print(run)
             entry.append(run.points)
             entry.append(run.coins)
 
-        if run is not None:
-            data.append(entry)
+            if run is not None:
+                data.append(entry)
 
     return render_template('scoreboard.html', data=data)
     
@@ -104,6 +138,8 @@ def add_run():
         current_account_id = get_jwt_identity()
         player:database.Player = database.Player.query.filter_by(id=current_account_id).one_or_none()
 
+        print(player)
+
         if player is not None:
             valid_level = database.Level.query.filter_by(id=level_id).count() == 1
             if not valid_level:
@@ -111,6 +147,7 @@ def add_run():
             
             new_run:database.Run = database.Run(points=points, coins=coins, level_id=level_id)
             player.runs.append(new_run)
+            print(player.runs)
             database.db.session.commit()
             return jsonify({'success': True}), 200
     except Exception as e:
