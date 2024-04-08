@@ -11,6 +11,42 @@ function get_token()
     return sessionStorage.getItem('access_token');
 }
 
+function createUser(username, password)
+{
+    var data = JSON.stringify
+    ({
+        username: username,
+        password: password
+    });
+
+    fetch(LOGIN_ENDPOINT, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: data
+    })
+    .then(response => {
+        if (!response.headers.get("content-type")?.includes("application/json"))
+            throw new Error(`Expected a json response from ${LOGIN_ENDPOINT}`);
+
+        if (!response.ok) 
+            throw new Error(`Response from ${LOGIN_ENDPOINT} was not ok`);
+        
+        return response.json();
+    })
+    .then(json => {
+        console.log('create', json);
+
+        // add the token to session storage (reloading the page will remove it)
+        // alternatively could be added to local storage which lasts for longer
+        sessionStorage.setItem("access_token", json.access_token);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+
 /**
  * Sends a request to the /login endpoint in order to
  * create an access token in session storage which is required

@@ -45,7 +45,7 @@ def create():
 
             database.db.session.commit()
 
-            token = create_access_token(identity=account.id)
+            #token = create_access_token(identity=account.id)
 
             return 'Account Created'
         
@@ -84,12 +84,18 @@ def login_page():
         print(e)
         return "Something went wrong"
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
 
     try:
-        username = request.json.get('username')
-        password = request.json.get('password')
+        username = None
+        password = None
+        if request.is_json:
+            username = request.json.get('username')
+            password = request.json.get('password')
+        else:
+            username = request.form.get('username')
+            password = request.form.get('password')
 
         print(username, password)
 
