@@ -9,6 +9,6 @@ createForm.addEventListener("submit", (e) => {
     if (username.value == "" || password.value == "") {
       console.log('empty values');
     } else {
-        login(username, password);
+        login(username.value, password.value);
     }
   });

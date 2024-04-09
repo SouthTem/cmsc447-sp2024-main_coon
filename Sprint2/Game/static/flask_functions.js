@@ -8,7 +8,7 @@ const COIN_ENDPOINT = "/update_coins"
  */
 function get_token()
 {
-    return sessionStorage.getItem('access_token');
+    return localStorage.getItem('access_token');
 }
 
 function createUser(username, password)
@@ -40,7 +40,7 @@ function createUser(username, password)
 
         // add the token to session storage (reloading the page will remove it)
         // alternatively could be added to local storage which lasts for longer
-        sessionStorage.setItem("access_token", json.access_token);
+        localStorage.setItem("access_token", json.access_token);
     })
     .catch(error => {
         console.error("Error:", error);
@@ -56,6 +56,7 @@ function createUser(username, password)
  */
 function login(username, password)
 {
+    console.log('login!!');
     var data = JSON.stringify
     ({
         username: username,
@@ -80,10 +81,11 @@ function login(username, password)
     })
     .then(json => {
         console.log('login', json);
+        // looks like we need local storage so that when changing html pages the information is the same
 
         // add the token to session storage (reloading the page will remove it)
         // alternatively could be added to local storage which lasts for longer
-        sessionStorage.setItem("access_token", json.access_token);
+        localStorage.setItem("access_token", json.access_token);
     })
     .catch(error => {
         console.error("Error:", error);

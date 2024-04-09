@@ -12,6 +12,7 @@ createForm.addEventListener("submit", (e) => {
       console.log('empty values');
     } else {
         login(username.value, password.value);
-        window.location.href = "/";
+        alert('login success');
+        //window.location.href = "/";
     }
   });

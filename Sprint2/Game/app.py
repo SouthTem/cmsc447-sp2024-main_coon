@@ -47,7 +47,7 @@ def create():
 
             #token = create_access_token(identity=account.id)
 
-            return 'Account Created'
+            return redirect(url_for('login_page'))
         
         if request.method == "GET":
             return render_template('create.html')
@@ -71,6 +71,7 @@ def login_page():
             print(account)
             if account is not None:
                 token = create_access_token(identity=account.id)
+
                 print("token:", token)
                 # TODO: redirect to the game
                 return "Login Successful"
@@ -84,7 +85,7 @@ def login_page():
         print(e)
         return "Something went wrong"
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
 
     try:
@@ -117,18 +118,12 @@ def leaderboard():
     data = []
     player:database.Player = None
     for player in database.Player.query.all():
-        entry = []
         player_account:database.UserAccount = database.UserAccount.query.get(ident=player.account_id)
-        entry.append(player_account.username)
         
         run:database.Run = None
         for run in player.runs:
             print(run)
-            entry.append(run.points)
-            entry.append(run.coins)
-
-            if run is not None:
-                data.append(entry)
+            data.append([player_account.username, run.points, run.coins])
 
     return render_template('scoreboard.html', data=data)
     
@@ -142,6 +137,7 @@ def add_run():
         level_id = data.get('level_id', 1)
 
         current_account_id = get_jwt_identity()
+        print('current id:', current_account_id)
         player:database.Player = database.Player.query.filter_by(id=current_account_id).one_or_none()
 
         print(player)
