@@ -107,10 +107,12 @@ def login():
             token = create_access_token(identity=account.id)
             print("token:", token)
             
-            return jsonify({'access_token': token})
+            return jsonify({'success':True, 'access_token': token})
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'message': str(e)}), 400
+    
+    return jsonify({'success': False, 'message': 'bad'})
 
 # TODO: sort the data by score, only display the best scores, all filtering/sorting
 @app.route('/leaderboard', methods=['GET'])

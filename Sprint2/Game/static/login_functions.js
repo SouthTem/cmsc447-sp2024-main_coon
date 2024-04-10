@@ -11,8 +11,16 @@ createForm.addEventListener("submit", (e) => {
     if (username.value == "" || password.value == "") {
       console.log('empty values');
     } else {
-        login(username.value, password.value);
-        alert('login success');
+        let x = login(username.value, password.value);
+        console.log(x);
+        x.then(success => {
+          console.log(success);
+          if (success)
+            alert('login success');
+          else{
+            alert('bad login');
+          }
+        });
         //window.location.href = "/";
     }
   });

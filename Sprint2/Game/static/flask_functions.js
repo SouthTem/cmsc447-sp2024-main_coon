@@ -63,7 +63,7 @@ function login(username, password)
         password: password
     });
 
-    fetch(LOGIN_ENDPOINT, {
+    return fetch(LOGIN_ENDPOINT, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -81,14 +81,22 @@ function login(username, password)
     })
     .then(json => {
         console.log('login', json);
-        // looks like we need local storage so that when changing html pages the information is the same
+        let success = json.success;
+        
+        // if the response from the server is bad fail here
+        if (!success) return false;
 
+        // looks like we need local storage so that when changing html pages the information is the same
+        
         // add the token to session storage (reloading the page will remove it)
         // alternatively could be added to local storage which lasts for longer
         localStorage.setItem("access_token", json.access_token);
+
+        return success;
     })
     .catch(error => {
         console.error("Error:", error);
+        return false;
     });
 }
 
