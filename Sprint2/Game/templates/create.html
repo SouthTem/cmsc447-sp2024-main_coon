@@ -19,12 +19,12 @@
                     <h2 class="bg-dark text-center text-white">Create User</h2>
                     <div class="container my-5">
                         <label for: name>Username</label>
-                        <input class="form-control" type ="text" name="username" required>
+                        <input id="username" class="form-control" type ="text" name="username" required>
                     </div>
 
                     <div class="container my-5">
                         <label for: id>Password</label>
-                        <input class="form-control" type="password" name="password" required>
+                        <input id="password" class="form-control" type="password" name="password" required>
                     </div>
 
                     <div class="container my-5">
@@ -58,4 +58,5 @@
 
 {% block scripts %}
 <script src="static/flask_functions.js"></script>
+<script src="static/create_functions.js"></script>
 {% endblock %}

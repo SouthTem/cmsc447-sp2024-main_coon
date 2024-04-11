@@ -23,8 +23,45 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-@app.route('/create', methods=['GET', 'POST'])
+@app.route('/create', methods=['POST'])
 def create():
+    try:
+        if request.method == "POST":
+
+            username = None
+            password = None
+            if request.is_json:
+                username = request.json.get('username')
+                password = request.json.get('password')
+            else:
+                username = request.form.get('username')
+                password = request.form.get('password')
+
+            print('create', username, password)
+            
+            if database.UserAccount.query.filter_by(username=username).count() > 0:
+                return jsonify({'success':False, 'message':'username was already taken'})
+
+            account:database.UserAccount = database.UserAccount(username=username, password=password)
+            
+            player:database.Player = database.Player(user_account=account)
+
+            print(account)
+            database.db.session.add_all([account, player])
+
+            database.db.session.commit()
+
+            #token = create_access_token(identity=account.id)
+
+            return jsonify({'success':True, 'message':'User was created'})
+        
+    except Exception as e:
+        print(e)
+        return jsonify({'success':False, 'message':'User failed to create'})
+    
+    
+@app.route('/create_page', methods=['GET'])
+def create_page():
     try:
         if request.method == "POST":
 

@@ -1,6 +1,7 @@
 const LOGIN_ENDPOINT = "/login";
 const RUN_ENDPOINT = "/run";
 const COIN_ENDPOINT = "/update_coins"
+const CREATE_ENDPOINT = "/create";
 
 /**
  * Gets the auth token from storage
@@ -11,7 +12,12 @@ function get_token()
     return localStorage.getItem('access_token');
 }
 
-function createUser(username, password)
+function delete_token()
+{
+    localStorage.removeItem('access_token');
+}
+
+function create(username, password)
 {
     var data = JSON.stringify
     ({
@@ -19,7 +25,7 @@ function createUser(username, password)
         password: password
     });
 
-    fetch(LOGIN_ENDPOINT, {
+    return fetch(CREATE_ENDPOINT, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -37,13 +43,18 @@ function createUser(username, password)
     })
     .then(json => {
         console.log('create', json);
+        let success = json.success;
+        
+        // if the response from the server is bad fail here
+        if (!success) return false;
 
-        // add the token to session storage (reloading the page will remove it)
-        // alternatively could be added to local storage which lasts for longer
-        localStorage.setItem("access_token", json.access_token);
+        login(username, password);
+
+        return success;
     })
     .catch(error => {
         console.error("Error:", error);
+        return false;
     });
 }
 

@@ -9,6 +9,19 @@ createForm.addEventListener("submit", (e) => {
     if (username.value == "" || password.value == "") {
       console.log('empty values');
     } else {
-        login(username.value, password.value);
+        let x = create(username.value, password.value);
+        console.log(x);
+        x.then(success => {
+          console.log(success);
+          if (success)
+          {
+            alert('create success');
+            window.location.href = "/";
+          }
+          else{
+            alert('create failed');
+          }
+        });
+        //window.location.href = "/";
     }
   });
