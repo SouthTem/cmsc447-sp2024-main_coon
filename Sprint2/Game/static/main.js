@@ -33,4 +33,4 @@ const config = {
 
 };
 
-export default new Phaser.Game(config);
+new Phaser.Game(config);

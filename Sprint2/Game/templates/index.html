@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block head_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.js"></script>
+{% endblock %}
+
+{% block title %}Game{% endblock %}
+
+{% block body %}
+
+<div class="container bg-secondary-subtle text-center">
+
+    <div class="container bg-dark text-center">
+        <h1 class="fw-bold text-white">CMSC 447 GAME</h1>
+    </div>
+
+    <button onclick="login('test', 'pass')" type="submit" class="btn btn-secondary">Login</button>
+
+    <button onclick="addCoins(10)" type="submit" class="btn btn-secondary">Coins</button>
+
+    <button onclick="addRun(97, 10, 1)" type="submit" class="btn btn-secondary">Run</button>
+
+    <div class="container text-center my-5" id="game-div">
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="static/test_game.js"></script>
+<!-- <script src="static/scenes/Preloader.js"></script>
+<script src="static/scenes/MainMenu.js"></script>
+<script src="static/scenes/GameOver.js"></script>
+<script src="static/scenes/Game.js"></script>
+<script src="static/scenes/Boot.js"></script>
+<script src="static/main.js"></script> -->
+<script src="static/flask_functions.js"></script>
+{% endblock %}
