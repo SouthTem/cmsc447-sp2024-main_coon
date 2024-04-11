@@ -1,6 +1,4 @@
 flask
-sqlite3
 flask-sqlalchemy
-virtualenv
 flask-bcrypt
 flask-jwt-extended

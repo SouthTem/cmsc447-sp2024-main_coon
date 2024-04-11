@@ -13,7 +13,9 @@ var config = {
     scene: {
         preload: preload,
         create: create,
-        update: update
+        update: update,
+        MainMenu,
+        GameOver,
     }
 };
 
@@ -30,7 +32,7 @@ var isGameOver = false;
 
 function preload ()
 {
-    this.load.setPath('static/images');
+    this.load.setPath('static/Sprites');
     this.load.image('sky', 'sky.png');
     this.load.image('ground', 'platform.png');
     this.load.image('star', 'star.png');
@@ -126,7 +128,7 @@ function update ()
     }
 
     if(player.x <= 0 || player.y > 600) {
-        gameOver();
+        this.scene.start('GameOver');
     }
 
     platforms.children.iterate(child => {

@@ -9,11 +9,14 @@ class MainMenu extends Phaser.Scene
 
     create ()
     {
-        this.add.image(512, 384, 'background');
+        let centerX = config.width / 2;
+        let centerY = config.height / 2;
 
-        this.add.image(512, 300, 'logo');
+        this.add.image(centerX, centerY, 'background');
 
-        this.add.text(512, 460, 'Main Menu', {
+        this.add.image(centerX, centerY - 100, 'logo');
+
+        this.add.text(centerX, centerY + 100, 'Main Menu', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

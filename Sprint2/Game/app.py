@@ -220,7 +220,6 @@ def update_coins():
 
 @app.route('/')
 def index():
-    #setup()
     #ac = database.UserAccount.get_account("test2", "pass")
     #print(ac)
 
