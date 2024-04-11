@@ -21,7 +21,6 @@ class MainMenu extends Phaser.Scene
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
-        console.log(this.input);
 
         // start the game with click
         this.input.once('pointerdown', () => {

@@ -7,6 +7,11 @@ var obstacles;
 var coins;
 
 var score = 0;
+var scoreText;
+
+var gameDepth = 150;
+var coinDepth = 100;
+var textDepth = 200;
 
 var cursors;
 var gravityKey;
@@ -30,6 +35,7 @@ class Game extends Phaser.Scene
         var coin = coins.create(x, y, 'coin');
         coin.setVelocityX(-scrollSpeed);
         coin.setScale(2);
+        coin.setDepth(coinDepth);
         return coin;
     }
 
@@ -39,6 +45,8 @@ class Game extends Phaser.Scene
 
         score += 20;
         console.log(score);
+
+        scoreText.setText('Score: ' + score);
     }
 
     createHorizontalPlatform(x, y, width)
@@ -47,6 +55,7 @@ class Game extends Phaser.Scene
         platform.setOrigin(0, 0);
         platform.setVelocityX(-scrollSpeed);
         platform.displayWidth = width;
+        platform.setDepth(gameDepth);
         return platform;
     }
 
@@ -58,6 +67,7 @@ class Game extends Phaser.Scene
         obstacle.setOrigin(0, 0);
         obstacle.displayWidth = width;
         obstacle.displayHeight = height;
+        obstacle.setDepth(gameDepth);
         return obstacle;
     }
 
@@ -105,6 +115,14 @@ class Game extends Phaser.Scene
         this.createVerticalPlatforms(true, Phaser.Math.Between(0, 100));
 
         this.createVerticalPlatforms(false, 300 + Phaser.Math.Between(0, 100));
+
+        //scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+        scoreText = this.add.text(16, 16, 'Score: 0', {
+            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+        });
+        scoreText.setDepth(textDepth);
     }
 
     createVerticalPlatforms(top=true, startX=0)
