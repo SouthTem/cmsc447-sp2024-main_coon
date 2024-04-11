@@ -11,10 +11,11 @@ var config = {
     width: 800, // 1024
     height: 600, // 768
     parent: "game-div",
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 800 },
+            gravity: { y: 1600 },
             debug: false
         }
     },

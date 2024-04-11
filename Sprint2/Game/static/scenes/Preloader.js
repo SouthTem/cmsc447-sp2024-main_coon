@@ -34,6 +34,7 @@ class Preloader extends Phaser.Scene
     {
         this.load.setPath('static/Sprites');
         //this.load.image('sky', 'sky.png');
+        this.load.image('coin', 'Coin.png');
         this.load.image('background', 'bg.png');
         this.load.image('logo', 'logo.png');
         this.load.image('ground', 'platform.png');

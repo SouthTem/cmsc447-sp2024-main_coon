@@ -21,11 +21,16 @@ class MainMenu extends Phaser.Scene
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
         }).setOrigin(0.5);
+        console.log(this.input);
 
+        // start the game with click
         this.input.once('pointerdown', () => {
-
             this.scene.start('Game');
+        });
 
+        // start the game with space
+        this.input.keyboard.on('keydown-SPACE', () => {
+            this.scene.start('Game');
         });
     }
 }
