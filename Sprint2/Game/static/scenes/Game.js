@@ -22,6 +22,7 @@ var isGameOver = false;
 let topY = 0;
 let bottomY = 500;
 var tick = 0;
+var walls = []
 
 class Game extends Phaser.Scene
 {
@@ -49,9 +50,9 @@ class Game extends Phaser.Scene
         scoreText.setText('Score: ' + score);
     }
 
-    createHorizontalPlatform(x, y, width)
+    createHorizontalPlatform(x, y, width, sprite = 'wooden')
     {
-        var platform = platforms.create(x, y, 'ground');
+        var platform = platforms.create(x, y, sprite);
         platform.setOrigin(0, 0);
         platform.setVelocityX(-scrollSpeed);
         platform.displayWidth = width;
@@ -63,7 +64,13 @@ class Game extends Phaser.Scene
     {
         var height = Phaser.Math.Between(heightMin, heightMax);
         var width = Phaser.Math.Between(widthMin, widthMax);
-        var obstacle = obstacles.create(x, y, 'ground').setVelocityX(-scrollSpeed);
+        //var obstacle = obstacles.create(x, y, 'wooden').setVelocityX(-scrollSpeed);
+        var obstacle = this.add.tileSprite(x, y, width, height, 'wooden').setScale(2);
+        obstacles.add(obstacle);
+        this.physics.add.existing(obstacle, false);
+
+        //block.body.setVelocity(-scrollSpeed, 0);
+        obstacle.body.setVelocityX(-scrollSpeed);
         obstacle.setOrigin(0, 0);
         obstacle.displayWidth = width;
         obstacle.displayHeight = height;
@@ -91,12 +98,25 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
+        console.log(coins);
+
         this.createHorizontalPlatform(0, 0, 1200);
         this.createHorizontalPlatform(0, 500, 1200);
 
         player = this.physics.add.sprite(100, 450, 'dude').setFlipX(true);
         //player.setBounce(0.2);
         //player.setCollideWorldBounds(true);
+        var block = this.add.tileSprite(100, 400, 24 * 4, 24 * 2, 'wooden').setScale(2);
+        //walls.push(block);
+        obstacles.add(block);
+        this.physics.add.existing(block, false);
+
+        //block.body.setVelocity(-scrollSpeed, 0);
+        block.body.setVelocityX(-scrollSpeed);
+
+        //this.physics.add.collider(block, player);
+
+        //this.physics.add.existing(block, true);
 
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(player, obstacles);
@@ -136,9 +156,9 @@ class Game extends Phaser.Scene
         {
             var platform;
             if (top) 
-                platform = this.createVerticalPlatform(currWidth, topY, 50, 200, 100, 200).refreshBody();
+                platform = this.createVerticalPlatform(currWidth, topY, 50, 200, 100, 200)//.refreshBody();
             else
-                platform = this.createVerticalPlatform(currWidth, bottomY, 50, 200, 50, 100).refreshBody().setOrigin(0,1);
+                platform = this.createVerticalPlatform(currWidth, bottomY, 50, 200, 50, 100).setOrigin(0,1);
             currWidth += platform.displayWidth + Phaser.Math.Between(-50, 50);
         }
     }
@@ -206,11 +226,13 @@ class Game extends Phaser.Scene
 
         // remove all the vertical walls that have gone offscreen
         let deleteCount = 0;
+        
         for (var i = 0; i < obstacles.children.entries.length; ++i)
         {
             let child = obstacles.children.entries[i];
-            if (child.x <= -child.width)
+            if (child.x <= -child.displayWidth)
             {
+                console.log(child);
                 deleteCount++;
                 obstacles.children.entries.splice(i, 1);
                 i--;
