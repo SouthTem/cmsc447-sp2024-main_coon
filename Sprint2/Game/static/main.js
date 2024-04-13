@@ -8,15 +8,15 @@
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 var config = {
     type: Phaser.AUTO,
-    width: 800, // 1024
-    height: 600, // 768
+    width: mainWidth, // 1024
+    height: mainHeight, // 768
     parent: "game-div",
-    pixelArt: true,
+    pixelArt: false,
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 1600 },
-            debug: true
+            gravity: { y: mainGravity },
+            debug: false
         }
     },
     scene: [
