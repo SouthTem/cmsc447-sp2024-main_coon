@@ -157,10 +157,19 @@ class Game extends Phaser.Scene
         //this.createHorizontalPlatform(0, 0, 1200);
         //this.createHorizontalPlatform(0, 500, 1200);
 
-        player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dude').setFlipX(true);
+        player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
+
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('dog', { start: 0, end: 1 }),
+            frameRate: 5,
+            repeat: -1
+        });
+
+        player.anims.play('walk', true);
+
         //player.setBounce(0.2);
         //player.setCollideWorldBounds(true);
-        //this.physics.add.existing(block, true);
 
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(player, obstacles);

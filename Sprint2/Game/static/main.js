@@ -11,7 +11,7 @@ var config = {
     width: mainWidth, // 1024
     height: mainHeight, // 768
     parent: "game-div",
-    pixelArt: false,
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {
