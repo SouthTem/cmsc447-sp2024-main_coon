@@ -28,10 +28,13 @@ var gridSize = 24;
 var tileScale = 2;
 var maxTileWidth = Math.ceil(mainWidth / gridSize);
 var maxTileHeight = Math.ceil(mainHeight / gridSize);
+
 var spawnTileX = Math.ceil(maxTileWidth / 2);
 var spawnTileY = Math.ceil(maxTileHeight / 2);
 var floorTileY = maxTileHeight;
 var ceilingTileY = 0;
+var minGap = 3 * gridSize;
+var maxGap = 10 * gridSize;
 
 var floorHeight = 0;
 var ceilingHeight = 0;
@@ -137,10 +140,11 @@ class Game extends Phaser.Scene
         this.physics.world.setBounds(0, 0, mainWidth, mainHeight);
         this.cameras.main.startFollow(player);
 
-        for(var i = 0; i < maxTileWidth; ++i)
+        let offscreenBuffer = 3;
+        for(var i = 0; i < maxTileWidth + offscreenBuffer; ++i)
         {
-            this.createGround('wooden', i * gridSize);
-            this.createCeiling('wooden', i * gridSize);
+            this.createGround('wooden', i * gridSize, 1, 1, 10, 10);
+            this.createCeiling('wooden', i * gridSize, 1, 1, 5, 5);
         }
 
         scoreText = this.add.text(16, 16, 'Score: 0', {
@@ -152,19 +156,83 @@ class Game extends Phaser.Scene
 
     createBetterGround(sprite = 'wooden')
     {
+        let previousWidth = this.lastGround.displayWidth;
+        let previousHeight = this.lastGround.displayHeight;
+        let prevX = this.lastGround.body.x;
+        let prevY = this.lastGround.body.y;
 
+        let randomNumber = Phaser.Math.Between(0, 100);
+
+        let x = prevX + previousWidth;
+        let y = prevY + previousHeight;
+        let width = 1;
+        let height = previousHeight / gridSize;
+
+        let groundPos = this.lastGround.body.y;
+        let ceilingPos = this.lastCeiling.body.y + this.lastCeiling.displayHeight;
+        let currentGap = groundPos - ceilingPos;
+
+        if (randomNumber > 60)
+        {
+            let variance = Phaser.Math.Between(-1,1);
+            height = previousHeight / gridSize + variance;
+            
+            let calcGap = currentGap - variance * gridSize;
+
+            if (calcGap < minGap)
+            {
+                height = previousHeight / gridSize;
+            }
+
+            height = Phaser.Math.Clamp(height, 1, 100);
+        }
+
+        this.lastGround = this.createTile(x, y, width, height, sprite, floors).setOrigin(0,1);
     }
 
-    
-
-    createGround(sprite = 'wooden', x = 0)
+    createGround(sprite = 'wooden', x = 0, minWidth = 1, maxWidth = 1, minHeight = 1, maxHeight = 10)
     {
-        this.lastGround = this.createRandomTile(sprite, floors, x, floorTileY * gridSize, 1, 1, 1, 10).setOrigin(0, 1);
+        this.lastGround = this.createRandomTile(sprite, floors, x, floorTileY * gridSize, minWidth, maxWidth, minHeight, maxHeight).setOrigin(0, 1);
     }
 
-    createCeiling(sprite = 'wooden', x = 0)
+    createBetterCeiling(sprite = 'wooden')
     {
-        this.lastCeiling = this.createRandomTile(sprite, ceilings, x, ceilingTileY * gridSize, 1, 1, 1, 8);
+        let previousWidth = this.lastCeiling.displayWidth;
+        let previousHeight = this.lastCeiling.displayHeight;
+        let prevX = this.lastCeiling.body.x;
+        let prevY = this.lastCeiling.body.y;
+
+        let randomNumber = Phaser.Math.Between(0, 100);
+
+        let x = prevX + previousWidth;
+        let y = prevY;
+        let width = 1;
+        let height = previousHeight / gridSize;
+
+        let groundPos = this.lastGround.body.y;
+        let ceilingPos = this.lastCeiling.body.y + this.lastCeiling.displayHeight;
+        let currentGap = groundPos - ceilingPos;
+
+        if (randomNumber > 60)
+        {
+            let variance = Phaser.Math.Between(-1,1);
+            height = previousHeight / gridSize + variance;
+            let calcGap = currentGap - variance * gridSize;
+
+            if (calcGap < minGap)
+            {
+                height = previousHeight / gridSize;
+            }
+            height = Phaser.Math.Clamp(height, 1, 100);
+        }
+
+        this.lastCeiling = this.createTile(x, y, width, height, sprite, ceilings).setOrigin(0,0);
+    }
+
+
+    createCeiling(sprite = 'wooden', x = 0, minWidth = 1, maxWidth = 1, minHeight = 1, maxHeight = 10)
+    {
+        this.lastCeiling = this.createRandomTile(sprite, ceilings, x, ceilingTileY * gridSize, minWidth, maxWidth, minHeight, maxHeight);
     }
 
     update()
@@ -238,7 +306,8 @@ class Game extends Phaser.Scene
         // add in new vertical walls for each wall that was deleted
         for (var i = 0; i < deleteCount; ++i)
         {
-            this.createGround('wooden', this.lastGround.body.x + this.lastGround.displayWidth);
+            this.createBetterGround('wooden');
+            //this.createGround('wooden', this.lastGround.body.x + this.lastGround.displayWidth);
         }
 
         deleteCount = 0;
@@ -258,7 +327,7 @@ class Game extends Phaser.Scene
         for (var i = 0; i < deleteCount; ++i)
         {
             console.log(posX);
-            this.createCeiling('wooden', this.lastCeiling.body.x + this.lastCeiling.displayWidth);
+            this.createBetterCeiling('wooden');
         }
 
         // delete coins that go offscreen
