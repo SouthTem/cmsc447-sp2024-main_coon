@@ -22,7 +22,7 @@ class GameOver extends Phaser.Scene
         }).setOrigin(0.5);
 
         this.input.once('pointerdown', () => {
-
+            this.scene.restart('MainMenu');
             this.scene.start('MainMenu');
 
         });
