@@ -2,9 +2,20 @@
 
 class GameOver extends Phaser.Scene
 {
+    score;
+    coins;
+    completion;
+
     constructor ()
     {
         super('GameOver');
+    }
+
+    init(data)
+    {
+        this.score = data.score;
+        this.coins = data.coins;
+        this.completion = data.completion;
     }
 
     create ()
@@ -15,7 +26,25 @@ class GameOver extends Phaser.Scene
 
         this.add.image(centerX, centerY, 'background').setAlpha(0.5);
 
-        this.add.text(centerX, centerY, 'Game Over', {
+        this.add.text(centerX, centerY - 200, 'Game Over', {
+            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5);
+
+        this.add.text(centerX, centerY - 100, `Completion: ${Math.round(this.completion * 100)}%`, {
+            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5);
+
+        this.add.text(centerX, centerY, `Score: ${this.score}`, {
+            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5);
+
+        this.add.text(centerX, centerY + 100, `Coins: ${this.coins}`, {
             fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'

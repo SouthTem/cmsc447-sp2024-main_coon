@@ -137,8 +137,8 @@ class Game extends Phaser.Scene
         this.level = new Level(src);
         this.level.readLevelImage(this);
 
-        this.cameras.main.setBounds(0, 0, (src.width - spawnTileX) * gridSize, mainHeight);
-        this.physics.world.setBounds(0, 0, (src.width - spawnTileX) * gridSize, mainHeight);
+        this.cameras.main.setBounds(0, 0, (src.width) * gridSize, mainHeight);
+        this.physics.world.setBounds(0, 0, (src.width) * gridSize, mainHeight);
         this.cameras.main.startFollow(fakePlayer);
 
         bg.setScrollFactor(0);
@@ -258,13 +258,18 @@ class Game extends Phaser.Scene
         if (player.x <= this.cameras.main.worldView.x || player.y > 600)
         {
             this.level.unload(this);
-            this.scene.start('GameOver');
+            this.scene.start('GameOver', {
+                score: score,
+                coins: score / 20,
+                completion: player.x / this.physics.world.bounds.width
+            });
         }
 
         // TODO refine this to be more accurate
         if (player.x > this.physics.world.bounds.width)
         {
             this.level.unload(this);
+            console.log('completion', player.x / this.physics.world.bounds.width);
             this.scene.start('LevelComplete', {
                 score: score,
                 coins: score / 20,
