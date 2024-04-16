@@ -162,7 +162,7 @@ def leaderboard():
         run:database.Run = None
         for run in player.runs:
             print(run)
-            data.append([player_account.username, run.points, run.coins])
+            data.append([player_account.username, run.level_id, run.points, run.coins, run.create_time.strftime("%m/%d/%Y %I:%M %p")])
 
     return render_template('scoreboard.html', data=data)
     

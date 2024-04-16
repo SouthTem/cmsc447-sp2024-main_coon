@@ -261,6 +261,17 @@ class Game extends Phaser.Scene
             this.scene.start('GameOver');
         }
 
+        // TODO refine this to be more accurate
+        if (player.x > this.physics.world.bounds.width)
+        {
+            this.level.unload(this);
+            this.scene.start('LevelComplete', {
+                score: score,
+                coins: score / 20,
+                id: 1
+            });
+        }
+
         // remove all the vertical walls that have gone offscreen
         let deleteCount = 0;
 

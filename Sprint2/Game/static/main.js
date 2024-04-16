@@ -24,7 +24,8 @@ var config = {
         Preloader,
         MainMenu,
         Game,
-        GameOver
+        GameOver,
+        LevelComplete
     ],
 };
 
