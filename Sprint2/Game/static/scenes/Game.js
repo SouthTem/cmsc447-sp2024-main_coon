@@ -55,9 +55,10 @@ class Game extends Phaser.Scene
     createCoin(x, y)
     {
         var coin = coins.create(x, y, 'coin');
-        coin.setVelocityX(-scrollSpeed);
-        coin.setScale(2);
+        coin.setVelocityX(0);
+        coin.setScale(1.5);
         coin.setDepth(coinDepth);
+        coin.setOrigin(0,0);
         return coin;
     }
 
@@ -71,14 +72,6 @@ class Game extends Phaser.Scene
         scoreText.setText('Score: ' + score);
     }
 
-    createRandomTile(sprite = 'wooden', group, x = 0, y = 0, widthMin = 1, widthMax = 3, heightMin = 1, heightMax = 4)
-    {
-        var height = Phaser.Math.Between(heightMin, heightMax);
-        var width = Phaser.Math.Between(widthMin, widthMax);
-
-        return this.createTile(x, y, width, height, sprite, group);
-    }
-
     createTile(x = 0, y = 0, width = 1, height = 1, sprite = 'wooden', group)
     {
         let realWidth = width * gridSize;
@@ -88,7 +81,8 @@ class Game extends Phaser.Scene
         group.add(obstacle);
         this.physics.add.existing(obstacle, false);
 
-        obstacle.body.setVelocityX(-scrollSpeed);
+        let v = 0;
+        obstacle.body.setVelocityX(v);
         obstacle.setOrigin(0, 0);
         obstacle.displayWidth = realWidth;
         obstacle.displayHeight = realHeight;
@@ -98,7 +92,7 @@ class Game extends Phaser.Scene
 
     create()
     {
-        this.add.image(400, 300, 'sky');
+        let bg = this.add.image(400, 300, 'sky');
         gravity = config.physics.arcade.gravity.y;
 
         ceilings = this.physics.add.group({
@@ -138,29 +132,21 @@ class Game extends Phaser.Scene
         cursors = this.input.keyboard.createCursorKeys();
         gravityKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-        this.cameras.main.setBounds(0, 0, mainWidth, mainHeight);
-        this.physics.world.setBounds(0, 0, mainWidth, mainHeight);
-        this.cameras.main.startFollow(player);
-
-        // let offscreenBuffer = 3;
-        // for(var i = 0; i < maxTileWidth + offscreenBuffer; ++i)
-        // {
-        //     this.createGround('wooden', i * gridSize, 1, 1, 10, 10);
-        //     this.createCeiling('wooden', i * gridSize, 1, 1, 5, 5);
-        // }
-
         const src = this.textures.get('level1').getSourceImage();
         this.level = new Level(src);
         this.level.readLevelImage(this);
 
-        let x = 400;
-        let y = 0;
-        let i = 0;
+        this.cameras.main.setBounds(0, 0, (src.width - spawnTileX) * gridSize, mainHeight);
+        this.physics.world.setBounds(0, 0, (src.width - spawnTileX) * gridSize, mainHeight);
+        this.cameras.main.startFollow(player);
 
-        for (let i = 0; i < 1; ++i)
+        bg.setScrollFactor(0);
+
+        // a level should be at least as long as the screen
+        let buffer = 3;
+        for (let i = 0; i < maxTileWidth + buffer; ++i)
         {
-            this.drawNextColumn(x, y);
-            x += gridSize;
+            this.drawNextColumn();
         }
 
         scoreText = this.add.text(16, 16, 'Score: 0', {
@@ -168,116 +154,46 @@ class Game extends Phaser.Scene
             stroke: '#000000', strokeThickness: 8,
         });
         scoreText.setDepth(textDepth);
+        scoreText.setScrollFactor(0);
     }
 
-    mapPixels(pixel)
+    isColor(pixel, r = 0, g = 0, b = 0)
     {
-        if (pixel.b == 255)
-        {
-
-        }
+        return pixel.b === b && pixel.r === r && pixel.g === g;
     }
 
-    drawNextColumn(currX, currY)
+    drawNextColumn()
     {
+        if (this.level.isFinished()) return false;
+
         let column = this.level.readNext();
-        let y = currY;
-
         for (let i = 0; i < column.length; ++i)
         {
             let pixel = column[i];
-            console.log(pixel);
-            if (pixel.b === 255 && pixel.r === 0 && pixel.g === 0)
+            let y = i * gridSize;
+            if (this.isColor(pixel, 0, 0, 255))
             {
-                let tile = this.createTile(currX, y, 1, 1, 'wooden', ceilings);
-
-                y += tile.displayHeight;
-            }else{
-                y += gridSize;
+                let tile = this.createTile(this.level.x, y, 1, 1, 'wooden', ceilings);
             }
             
-        }
-    }
-
-    createBetterGround(sprite = 'wooden')
-    {
-        let previousWidth = this.lastGround.displayWidth;
-        let previousHeight = this.lastGround.displayHeight;
-        let prevX = this.lastGround.body.x;
-        let prevY = this.lastGround.body.y;
-
-        let randomNumber = Phaser.Math.Between(0, 100);
-
-        let x = prevX + previousWidth;
-        let y = prevY + previousHeight;
-        let width = 1;
-        let height = previousHeight / gridSize;
-
-        if (randomNumber > 60)
-        {
-            let variance = Phaser.Math.Between(-2,2);
-            height = this.clampHeightToGap(variance);
+            else if (this.isColor(pixel, 0, 255, 0))
+            {
+                this.createCoin(this.level.x, y);
+            }
         }
 
-        this.lastGround = this.createTile(x, y, width, height, sprite, floors).setOrigin(0,1);
-    }
-
-    createGround(sprite = 'wooden', x = 0, minWidth = 1, maxWidth = 1, minHeight = 1, maxHeight = 10)
-    {
-        this.lastGround = this.createRandomTile(sprite, floors, x, floorTileY * gridSize, minWidth, maxWidth, minHeight, maxHeight).setOrigin(0, 1);
-    }
-
-    clampHeightToGap(heightGain)
-    {
-        let groundPos = this.lastGround.body.y;
-        let ceilingPos = this.lastCeiling.body.y + this.lastCeiling.displayHeight;
-        let currentGap = groundPos - ceilingPos;
-        let height = this.lastCeiling.displayHeight / gridSize + heightGain;
-
-        let calcGap = currentGap - heightGain * gridSize;
-
-        if (calcGap < minGap)
-        {
-            height = this.lastCeiling.displayHeight / gridSize;
-        }
-
-        height = Phaser.Math.Clamp(height, 1, 100);
-        return height;
-    }
-
-    createBetterCeiling(sprite = 'wooden')
-    {
-        let previousWidth = this.lastCeiling.displayWidth;
-        let previousHeight = this.lastCeiling.displayHeight;
-        let prevX = this.lastCeiling.body.x;
-        let prevY = this.lastCeiling.body.y;
-
-        let randomNumber = Phaser.Math.Between(0, 100);
-
-        let x = prevX + previousWidth;
-        let y = prevY;
-        let width = 1;
-        let height = previousHeight / gridSize;
-
-        if (randomNumber > 60)
-        {
-            let variance = Phaser.Math.Between(-2,2);
-            height = this.clampHeightToGap(variance);
-        }
-
-        this.lastCeiling = this.createTile(x, y, width, height, sprite, ceilings).setOrigin(0,0);
-    }
-
-
-    createCeiling(sprite = 'wooden', x = 0, minWidth = 1, maxWidth = 1, minHeight = 1, maxHeight = 10)
-    {
-        this.lastCeiling = this.createRandomTile(sprite, ceilings, x, ceilingTileY * gridSize, minWidth, maxWidth, minHeight, maxHeight);
+        return true;
     }
 
     update()
     {
         tick++;
         if (isGameOver) return;
+
+        if (tick % 60 == 0)
+        {
+            console.log('object count = ', ceilings.children.entries.length);
+        }
 
         if (cursors.left.isDown)
         {
@@ -289,12 +205,7 @@ class Game extends Phaser.Scene
         }
         else
         {
-            player.setVelocityX(0);
-        }
-
-        if (cursors.up.isDown && player.body.touching.down)
-        {
-            player.setVelocityY(-330);
+            player.setVelocityX(scrollSpeed);
         }
 
         if (Phaser.Input.Keyboard.JustDown(gravityKey))
@@ -313,66 +224,38 @@ class Game extends Phaser.Scene
             
         }
 
+        // TODO refine this to be more accurate
         if (player.x <= 0 || player.y > 600)
         {
             this.scene.start('GameOver');
         }
 
-        // spawn coins every 2ish seconds
-        if (tick % 120 == 0)
-        {
-            var coinX = Phaser.Math.Between(config.width, config.width + 200);
-            var coinY = Phaser.Math.Between(100, 400);
-            this.createCoin(coinX, coinY);
-        }
-
         // remove all the vertical walls that have gone offscreen
         let deleteCount = 0;
-        let posX = 0;
-        
-        for (var i = 0; i < floors.children.entries.length; ++i)
-        {
-            let child = floors.children.entries[i];
-            if (child.x <= -child.displayWidth)
-            {
-                posX = child.x;
-                deleteCount++;
-                floors.children.entries.splice(i, 1);
-                i--;
-            }
-        }
-
-        // add in new vertical walls for each wall that was deleted
-        for (var i = 0; i < deleteCount; ++i)
-        {
-            //this.createBetterGround('wooden');
-            //this.createGround('wooden', this.lastGround.body.x + this.lastGround.displayWidth);
-        }
 
         deleteCount = 0;
         for (var i = 0; i < ceilings.children.entries.length; ++i)
         {
             let child = ceilings.children.entries[i];
-            if (child.x <= -child.displayWidth)
+            if (child.x + child.displayWidth <= this.cameras.main.worldView.x)
             {
-                posX = Math.ceil(child.x / gridSize);
                 deleteCount++;
                 ceilings.children.entries.splice(i, 1);
                 i--;
             }
         }
 
-        // add in new vertical walls for each wall that was deleted
-        for (var i = 0; i < deleteCount; ++i)
+        // when one column is deleted another should takes its place
+        if (deleteCount > 0)
         {
-            //this.createBetterCeiling('wooden');
+            this.drawNextColumn();
         }
 
         // delete coins that go offscreen
         for (var i = 0; i < coins.children.entries.length; ++i)
         {
             let child = coins.children.entries[i];
-            if (child.x <= -20)
+            if (child.x + child.displayWidth <= this.cameras.main.worldView.x)
             {
                 coins.children.entries.splice(i, 1);
                 i--;
