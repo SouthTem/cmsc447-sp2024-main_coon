@@ -1,3 +1,5 @@
+const key = 'map';
+
 class Level
 {
     src;
@@ -14,7 +16,7 @@ class Level
 
     readLevelImage(scene)
     {
-        const canvas = scene.textures.createCanvas('map', this.src.width, this.src.height).draw(0,0,this.src);
+        const canvas = scene.textures.createCanvas(key, this.src.width, this.src.height).draw(0,0,this.src);
 
         let count = 0;
         let data = []
@@ -43,5 +45,10 @@ class Level
         this.index++;
         this.x += this.tileSize;
         return column;
+    }
+
+    unload(scene)
+    {
+        scene.textures.remove(key);        
     }
 }

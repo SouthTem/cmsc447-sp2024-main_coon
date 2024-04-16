@@ -134,7 +134,6 @@ class Game extends Phaser.Scene
 
         cursors = this.input.keyboard.createCursorKeys();
         gravityKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
         const src = this.textures.get('level1').getSourceImage();
         this.level = new Level(src);
         this.level.readLevelImage(this);
@@ -230,6 +229,7 @@ class Game extends Phaser.Scene
         // TODO refine this to be more accurate
         if (player.x <= this.cameras.main.worldView.x || player.y > 600)
         {
+            this.level.unload(this);
             this.scene.start('GameOver');
         }
 
