@@ -111,6 +111,9 @@ class Game extends Phaser.Scene
         });
 
         player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
+        let fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
+        fakePlayer.visible = false;
+        fakePlayer.setVelocityX(scrollSpeed);
 
         this.anims.create({
             key: 'walk',
@@ -138,7 +141,7 @@ class Game extends Phaser.Scene
 
         this.cameras.main.setBounds(0, 0, (src.width - spawnTileX) * gridSize, mainHeight);
         this.physics.world.setBounds(0, 0, (src.width - spawnTileX) * gridSize, mainHeight);
-        this.cameras.main.startFollow(player);
+        this.cameras.main.startFollow(fakePlayer);
 
         bg.setScrollFactor(0);
 
@@ -225,7 +228,7 @@ class Game extends Phaser.Scene
         }
 
         // TODO refine this to be more accurate
-        if (player.x <= 0 || player.y > 600)
+        if (player.x <= this.cameras.main.worldView.x || player.y > 600)
         {
             this.scene.start('GameOver');
         }

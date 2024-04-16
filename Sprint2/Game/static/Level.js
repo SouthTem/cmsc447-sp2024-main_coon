@@ -1,6 +1,6 @@
 class Level
 {
-    #src;
+    src;
     index = 0;
     x = 0;
     y = 0;
@@ -9,19 +9,19 @@ class Level
 
     constructor(src)
     {
-        this.#src = src;
+        this.src = src;
     }
 
     readLevelImage(scene)
     {
-        const canvas = scene.textures.createCanvas('map', this.#src.width, this.#src.height).draw(0,0,this.#src);
+        const canvas = scene.textures.createCanvas('map', this.src.width, this.src.height).draw(0,0,this.src);
 
         let count = 0;
         let data = []
-        for (let i = 0; i < this.#src.width; ++i)
+        for (let i = 0; i < this.src.width; ++i)
         {
             data[i] = []
-            for (let j = 0; j < this.#src.height; ++j)
+            for (let j = 0; j < this.src.height; ++j)
             {
                 let pixel = new Phaser.Display.Color();
                 pixel.red
@@ -34,7 +34,7 @@ class Level
 
     isFinished()
     {
-        return this.index == this.#src.width;
+        return this.index == this.src.width;
     }
 
     readNext()
