@@ -6,7 +6,7 @@ var coins;
 var floors;
 var ceilings;
 
-var score = 0;
+var score;
 var scoreText;
 
 var gameDepth = 150;
@@ -62,12 +62,10 @@ class Game extends Phaser.Scene
         return coin;
     }
 
-    collectStar(player, star)
+    collectCoin(player, coin)
     {
-        star.disableBody(true, true);
-
+        coin.setX(-20);
         score += 20;
-        console.log(score);
 
         scoreText.setText('Score: ' + score);
     }
@@ -94,6 +92,7 @@ class Game extends Phaser.Scene
     {
         let bg = this.add.image(400, 300, 'sky');
         gravity = config.physics.arcade.gravity.y;
+        score = 0;
 
         ceilings = this.physics.add.group({
             allowGravity: false,
@@ -130,7 +129,7 @@ class Game extends Phaser.Scene
         this.physics.add.collider(player, ceilings);
         this.physics.add.collider(player, floors);
 
-        this.physics.add.overlap(player, coins, this.collectStar, null, this);
+        this.physics.add.overlap(player, coins, this.collectCoin, null, this);
 
         cursors = this.input.keyboard.createCursorKeys();
         gravityKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
