@@ -26,5 +26,15 @@ class GameOver extends Phaser.Scene
             this.scene.start('MainMenu');
 
         });
+
+        // restart the game with space
+        this.input.keyboard.on('keydown-SPACE', () => {
+            this.scene.start('Game');
+        });
+
+        // restart the game with r
+        this.input.keyboard.on('keydown-R', () => {
+            this.scene.start('Game');
+        });
     }
 }

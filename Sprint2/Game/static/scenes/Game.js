@@ -1,6 +1,7 @@
 //import { Scene } from 'phaser';
 
 var player;
+var fakePlayer;
 
 var coins;
 var floors;
@@ -17,7 +18,6 @@ var cursors;
 var gravityKey;
 var gravity;
 var isFlipped = false;
-var scrollSpeed = 24 * 5;
 var isGameOver = false;
 let topY = 0;
 let bottomY = 500;
@@ -80,7 +80,7 @@ class Game extends Phaser.Scene
         this.physics.add.existing(obstacle, false);
 
         let v = 0;
-        obstacle.body.setVelocityX(v);
+        //obstacle.body.setVelocityX(v);
         obstacle.setOrigin(0, 0);
         obstacle.displayWidth = realWidth;
         obstacle.displayHeight = realHeight;
@@ -110,7 +110,7 @@ class Game extends Phaser.Scene
         });
 
         player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
-        let fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
+        fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
         fakePlayer.visible = false;
         fakePlayer.setVelocityX(scrollSpeed);
 
@@ -163,27 +163,56 @@ class Game extends Phaser.Scene
         return pixel.b === b && pixel.r === r && pixel.g === g;
     }
 
+    samePixel(pixel1, pixel2)
+    {
+        return pixel1.r == pixel2.r && pixel1.g == pixel2.g && pixel1.b == pixel2.b;
+    }
+
     drawNextColumn()
     {
         if (this.level.isFinished()) return false;
 
         let column = this.level.readNext();
-        for (let i = 0; i < column.length; ++i)
+        let lastPixel = column[0];
+        let count = 1;
+        let y = 0;
+        for (let i = 1; i < column.length; ++i)
         {
             let pixel = column[i];
-            let y = i * gridSize;
-            if (this.isColor(pixel, 0, 0, 255))
+            if (this.samePixel(pixel, lastPixel))
             {
-                let tile = this.createTile(this.level.x, y, 1, 1, 'wooden', ceilings);
+                count++;
             }
-            
-            else if (this.isColor(pixel, 0, 255, 0))
+            else
             {
-                this.createCoin(this.level.x, y);
+                this.innerDraw(this.level.x, y, lastPixel, count);
+                y += count * gridSize;
+                count = 1; // why does this work
             }
+            lastPixel = pixel;
+        }
+        if (count > 0)
+        {
+            this.innerDraw(this.level.x, y, lastPixel, count);
         }
 
         return true;
+    }
+
+    innerDraw(x, y, pixel, count)
+    {
+        if (this.isColor(pixel, 0, 255, 0))
+        {
+            for (let i = 0; i < count; ++i)
+            {
+                this.createCoin(x, y + i * gridSize);
+            }
+        }
+
+        else if (this.isColor(pixel, 0, 0, 255))
+        {
+            this.createTile(x, y, 1, count, 'wooden', ceilings);
+        }
     }
 
     update()
@@ -215,14 +244,14 @@ class Game extends Phaser.Scene
             {
                 this.physics.world.gravity.y = gravity;
                 player.setFlipY(false);
-                isFlipped = !isFlipped;
-            } else if (player.body.touching.down)
+                isFlipped = false;
+            } 
+            if (!isFlipped && player.body.touching.down)
             {
                 this.physics.world.gravity.y = -gravity;
                 player.setFlipY(true);
-                isFlipped = !isFlipped;
+                isFlipped = true;
             }
-            
         }
 
         // TODO refine this to be more accurate
