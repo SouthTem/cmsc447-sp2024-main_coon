@@ -2,6 +2,7 @@ const LOGIN_ENDPOINT = "/login";
 const RUN_ENDPOINT = "/run";
 const COIN_ENDPOINT = "/update_coins"
 const CREATE_ENDPOINT = "/create";
+const USER_ENDPOINT = "/account";
 
 /**
  * Gets the auth token from storage
@@ -116,15 +117,15 @@ function login(username, password)
  * update the database with a new run
  * @param {integer} points number of points earned in the run
  * @param {integer} coins number of coins obtained in the run
- * @param {integer} levelId id of the level just ran
+ * @param {string} levelName name of the level just ran
  */
-function addRun(points, coins, levelId)
+function addRun(points, coins, levelName)
 {
     var data = JSON.stringify
     ({
         points: points,
         coins: coins,
-        level_id: levelId 
+        level_name: levelName 
     });
 
     token = get_token();
@@ -132,10 +133,10 @@ function addRun(points, coins, levelId)
     // can't do anything if token is null
     if (token == null)
     {
-        return;
+        return Promise.resolve(false);
     }
 
-    fetch(RUN_ENDPOINT, {
+    return fetch(RUN_ENDPOINT, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -152,15 +153,73 @@ function addRun(points, coins, levelId)
             console.warn(response.json())
             throw new Error(`Response from ${RUN_ENDPOINT} was not ok`);
         }
-
         
         return response.json();
     })
     .then(json => {
         console.log('addRun', json);
+        let success = json.success;
+
+        // if the response from the server is bad fail here
+        if (!success) return false;
+
+        return true;
     })
     .catch(error => {
         console.error(error);
+        return false;
+    });
+}
+
+function getUser()
+{
+    token = get_token();
+
+    var data = {
+        name: "",
+        success: false,
+        message: ''
+    };
+
+    // can't do anything if token is null
+    if (token == null)
+    {
+        success = false;
+        message = "token is null";
+        return Promise.resolve(data);
+    }
+
+    return fetch(USER_ENDPOINT, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + token
+        },
+    })
+    .then(response => {
+        if (!response.headers.get("content-type")?.includes("application/json"))
+            throw new Error(`Expected a json response from ${USER_ENDPOINT}`);
+
+        if (!response.ok)
+        {
+            console.warn(response.json())
+            throw new Error(`Response from ${USER_ENDPOINT} was not ok`);
+        }
+        
+        return response.json();
+    })
+    .then(json => {
+        let success = json.success;
+        let name = json.name;
+
+        data.success = success;
+        data.name = name;
+
+        return data;
+    })
+    .catch(error => {
+        data.message = error;
+        return data;
     });
 }
 
@@ -181,7 +240,7 @@ function addCoins(coins)
     // can't do anything if token is null
     if (token == null)
     {
-        return;
+        return Promise.resolve({success: false});
     }
 
     fetch(COIN_ENDPOINT, {

@@ -2,21 +2,30 @@ const key = 'map';
 
 class Level
 {
-    src;
+    
     index = 0;
     x = 0;
     y = 0;
     tileSize = 24;
+
+    src;
     data;
 
-    constructor(src)
+    name;
+    image;
+    scene;
+
+    constructor(name, image, scene)
     {
-        this.src = src;
+        this.name = name;
+        this.image = image;
+        this.scene = scene;
+        this.src = scene.textures.get(this.image).getSourceImage();
     }
 
-    readLevelImage(scene)
+    readLevelImage()
     {
-        const canvas = scene.textures.createCanvas(key, this.src.width, this.src.height).draw(0,0,this.src);
+        const canvas = this.scene.textures.createCanvas(key, this.src.width, this.src.height).draw(0,0,this.src);
 
         let count = 0;
         let data = []
@@ -26,7 +35,6 @@ class Level
             for (let j = 0; j < this.src.height; ++j)
             {
                 let pixel = new Phaser.Display.Color();
-                pixel.red
                 canvas.getPixel(i, j, pixel);
                 data[i][j] = pixel;
             }
@@ -47,8 +55,8 @@ class Level
         return column;
     }
 
-    unload(scene)
+    unload()
     {
-        scene.textures.remove(key);        
+        this.scene.textures.remove(key);        
     }
 }

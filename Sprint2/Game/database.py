@@ -87,11 +87,12 @@ class Outfit(db.Model):
 
 class Level(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False, unique=True)
+    texture: Mapped[str] = mapped_column(nullable=False, unique=True)
     difficulty: Mapped[int] = mapped_column(nullable=False, default=0)
 
     def __str__(self) -> str:
-        return f"Level: id={self.id}, name={self.difficulty}, difficulty={self.difficulty}"
+        return f"Level: id={self.id}, name={self.name}, texture={self.texture} difficulty={self.difficulty}"
 
 class Run(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -106,15 +107,16 @@ class Run(db.Model):
 
 
 def setup():
+    db.drop_all()
     db.create_all()
 
     out1 = Outfit(name="cool outfit", cost=120, texture='test.png')
     out2 = Outfit(name="cooler outfit", cost=140, texture='test2.png')
     out3 = Outfit(name="coolest outfit", cost=200, texture='test3.png')
 
-    lev1 = Level(name="cool level", difficulty=0)
-    lev2 = Level(name="cooler level", difficulty=1)
-    lev3 = Level(name="coolest level", difficulty=2)
+    lev1 = Level(name="Easy Level", texture="level1", difficulty=0)
+    lev2 = Level(name="Medium Level", texture="level2", difficulty=1)
+    lev3 = Level(name="Hard Level", texture="level3", difficulty=2)
 
     db.session.add_all([lev1, lev2, lev3])
 

@@ -9,6 +9,23 @@ class Preloader extends Phaser.Scene
 
     init ()
     {
+        let user = getUser();
+        user.then(json => {
+            console.log(json);
+            let success = json.success;
+            let name = json.name;
+
+            if (success)
+            {
+                //alert(`you are logged in as ${name}`);
+            }
+            else
+            {
+              alert('you are not logged in. Redirecting to login page!');
+              window.location.href = "/login_page";
+            }
+          });
+
         let centerX = config.width / 2;
         let centerY = config.height / 2;
 
@@ -42,7 +59,8 @@ class Preloader extends Phaser.Scene
         this.load.spritesheet('dog', 'Dog.png', { frameWidth: 24, frameHeight: 18 });
         this.load.image('star', 'star.png');
         this.load.spritesheet('dude', 'dude.png', { frameWidth: 32, frameHeight: 48 });
-        this.load.image('level1', 'level1.png');
+        this.load.image(level1key, 'level1.png');
+        this.load.image(level3key, 'level3.png');
     }
 
     create ()

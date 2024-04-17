@@ -93,6 +93,8 @@ class Game extends Phaser.Scene
         let bg = this.add.image(400, 300, 'sky');
         gravity = config.physics.arcade.gravity.y;
         score = 0;
+        isFlipped = false;
+        isGameOver = false;
 
         ceilings = this.physics.add.group({
             allowGravity: false,
@@ -133,12 +135,11 @@ class Game extends Phaser.Scene
 
         cursors = this.input.keyboard.createCursorKeys();
         gravityKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        const src = this.textures.get('level1').getSourceImage();
-        this.level = new Level(src);
-        this.level.readLevelImage(this);
+        this.level = new Level(level1Name, level1key, this);
+        this.level.readLevelImage();
 
-        this.cameras.main.setBounds(0, 0, (src.width) * gridSize, mainHeight);
-        this.physics.world.setBounds(0, 0, (src.width) * gridSize, mainHeight);
+        this.cameras.main.setBounds(0, 0, (this.level.src.width) * gridSize, mainHeight);
+        this.physics.world.setBounds(0, 0, (this.level.src.width) * gridSize, mainHeight);
         this.cameras.main.startFollow(fakePlayer);
 
         bg.setScrollFactor(0);
@@ -255,9 +256,9 @@ class Game extends Phaser.Scene
         }
 
         // TODO refine this to be more accurate
-        if (player.x <= this.cameras.main.worldView.x || player.y > 600)
+        if (player.x <= this.cameras.main.worldView.x || player.y > mainHeight || player.y < 0)
         {
-            this.level.unload(this);
+            this.level.unload();
             this.scene.start('GameOver', {
                 score: score,
                 coins: score / 20,
@@ -268,12 +269,12 @@ class Game extends Phaser.Scene
         // TODO refine this to be more accurate
         if (player.x > this.physics.world.bounds.width)
         {
-            this.level.unload(this);
+            this.level.unload();
             console.log('completion', player.x / this.physics.world.bounds.width);
             this.scene.start('LevelComplete', {
                 score: score,
                 coins: score / 20,
-                id: 1
+                name: this.level.name,
             });
         }
 
@@ -292,11 +293,8 @@ class Game extends Phaser.Scene
             }
         }
 
-        // when one column is deleted another should takes its place
-        if (deleteCount > 0)
-        {
-            this.drawNextColumn();
-        }
+        // load the columns until the whole level is loaded
+        this.drawNextColumn();
 
         // delete coins that go offscreen
         for (var i = 0; i < coins.children.entries.length; ++i)

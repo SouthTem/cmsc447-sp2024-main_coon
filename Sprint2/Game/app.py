@@ -160,9 +160,11 @@ def leaderboard():
         player_account:database.UserAccount = database.UserAccount.query.get(ident=player.account_id)
         
         run:database.Run = None
+        level:database.Level = None
         for run in player.runs:
+            level = database.Level.query.get(run.level_id)
             print(run)
-            data.append([player_account.username, run.level_id, run.points, run.coins, run.create_time.strftime("%m/%d/%Y %I:%M %p")])
+            data.append([player_account.username, level.name, run.points, run.coins, run.create_time.strftime("%m/%d/%Y %I:%M %p")])
 
     return render_template('scoreboard.html', data=data)
     
@@ -173,7 +175,7 @@ def add_run():
         data:dict = request.json
         points = data.get('points', 0)
         coins = data.get('coins', 0)
-        level_id = data.get('level_id', 1)
+        level_name = data.get('level_name', None)
 
         current_account_id = get_jwt_identity()
         print('current id:', current_account_id)
@@ -181,16 +183,44 @@ def add_run():
 
         print(player)
 
-        if player is not None:
-            valid_level = database.Level.query.filter_by(id=level_id).count() == 1
-            if not valid_level:
-                raise ValueError('level id was invalid')
-            
-            new_run:database.Run = database.Run(points=points, coins=coins, level_id=level_id)
-            player.runs.append(new_run)
-            print(player.runs)
-            database.db.session.commit()
-            return jsonify({'success': True}), 200
+        if player is None:
+            raise ValueError('player not found')
+
+        found_level:database.Level = database.Level.query.filter_by(name=level_name).one_or_none()
+        if found_level is None:
+            raise ValueError(f'level name ({level_name}) was invalid')
+        
+        new_run:database.Run = database.Run(points=points, coins=coins, level_id=found_level.id)
+        player.runs.append(new_run)
+        print(player.runs)
+        database.db.session.commit()
+        return jsonify({'success': True}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({'success': False, 'message': str(e)}), 400
+    
+@app.route('/account', methods=['GET'])
+@jwt_required()
+def get_user():
+    try:
+
+        current_account_id = get_jwt_identity()
+        print('current id:', current_account_id)
+        account:database.UserAccount = database.UserAccount.query.get(current_account_id)
+
+        if account is None:
+            raise ValueError('account not found')
+
+        player:database.Player = database.Player.query.filter_by(id=current_account_id).one_or_none()
+
+        print(player)
+
+        if player is None:
+            raise ValueError('player not found')
+
+        return jsonify({'success': True, 'name': account.username}), 200
+
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'message': str(e)}), 400
@@ -222,6 +252,7 @@ def update_coins():
 def index():
     #ac = database.UserAccount.get_account("test2", "pass")
     #print(ac)
+    #database.setup()
 
     return render_template("index.html")
 

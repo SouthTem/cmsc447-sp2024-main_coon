@@ -2,7 +2,7 @@ class LevelComplete extends Phaser.Scene
 {
     score = 0;
     coins = 0;
-    id = 1;
+    name = '';
 
     constructor ()
     {
@@ -13,7 +13,7 @@ class LevelComplete extends Phaser.Scene
     {
         this.score = data.score;
         this.coins = data.coins;
-        this.id = data.id;
+        this.name = data.name;
     }
 
     create ()
@@ -42,7 +42,7 @@ class LevelComplete extends Phaser.Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        addRun(this.score, this.coins, this.id);
+        addRun(this.score, this.coins, this.name);
 
         this.input.once('pointerdown', () => {
             this.scene.restart('MainMenu');
