@@ -135,7 +135,7 @@ class Game extends Phaser.Scene
 
         cursors = this.input.keyboard.createCursorKeys();
         gravityKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.level = new Level(level1Name, level1key, this);
+        this.level = new Level(level3Name, level3key, spaceKey, this);
         this.level.readLevelImage();
 
         this.cameras.main.setBounds(0, 0, (this.level.src.width) * gridSize, mainHeight);
@@ -186,7 +186,7 @@ class Game extends Phaser.Scene
             }
             else
             {
-                this.innerDraw(this.level.x, y, lastPixel, count);
+                this.innerDraw(this.level.x, y, this.level.sprite, lastPixel, count);
                 y += count * gridSize;
                 count = 1; // why does this work
             }
@@ -194,13 +194,13 @@ class Game extends Phaser.Scene
         }
         if (count > 0)
         {
-            this.innerDraw(this.level.x, y, lastPixel, count);
+            this.innerDraw(this.level.x, y, this.level.sprite, lastPixel, count);
         }
 
         return true;
     }
 
-    innerDraw(x, y, pixel, count)
+    innerDraw(x, y, sprite, pixel, count)
     {
         if (this.isColor(pixel, 0, 255, 0))
         {
@@ -212,7 +212,7 @@ class Game extends Phaser.Scene
 
         else if (this.isColor(pixel, 0, 0, 255))
         {
-            this.createTile(x, y, 1, count, 'wooden', ceilings);
+            this.createTile(x, y, 1, count, sprite, ceilings);
         }
     }
 

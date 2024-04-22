@@ -10,3 +10,7 @@ const level3key = 'level3';
 const level1Name = 'Easy Level';
 const level2Name = 'Medium Level';
 const level3Name = 'Hard Level';
+
+const woodenKey = 'wooden';
+const castleKey = 'castle';
+const spaceKey = 'space';

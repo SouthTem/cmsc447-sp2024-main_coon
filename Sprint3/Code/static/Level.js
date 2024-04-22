@@ -14,13 +14,15 @@ class Level
     name;
     image;
     scene;
+    sprite;
 
-    constructor(name, image, scene)
+    constructor(name, image, sprite, scene)
     {
         this.name = name;
         this.image = image;
         this.scene = scene;
         this.src = scene.textures.get(this.image).getSourceImage();
+        this.sprite = sprite;
     }
 
     readLevelImage()

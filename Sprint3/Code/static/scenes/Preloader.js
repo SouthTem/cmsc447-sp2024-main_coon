@@ -51,7 +51,9 @@ class Preloader extends Phaser.Scene
     {
         this.load.setPath('static/Sprites');
         //this.load.image('sky', 'sky.png');
-        this.load.image('wooden', 'Wooden.png');
+        this.load.image(woodenKey, 'Wooden.png');
+        this.load.image(castleKey, 'Castle.png');
+        this.load.image(spaceKey, 'Space.png');
         this.load.image('coin', 'Coin.png');
         this.load.image('background', 'bg.png');
         this.load.image('logo', 'logo.png');
@@ -60,6 +62,7 @@ class Preloader extends Phaser.Scene
         this.load.image('star', 'star.png');
         this.load.spritesheet('dude', 'dude.png', { frameWidth: 32, frameHeight: 48 });
         this.load.image(level1key, 'level1.png');
+        this.load.image(level2key, 'level2.png');
         this.load.image(level3key, 'level3.png');
     }
 
