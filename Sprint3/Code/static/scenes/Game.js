@@ -88,6 +88,12 @@ class Game extends Phaser.Scene
         return obstacle;
     }
 
+    init(data)
+    {
+        console.log(data);
+        this.level = new Level(data.name, data.key, data.sprite, this);
+    }
+
     create()
     {
         let bg = this.add.image(400, 300, 'sky');
@@ -135,7 +141,7 @@ class Game extends Phaser.Scene
 
         cursors = this.input.keyboard.createCursorKeys();
         gravityKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.level = new Level(level3Name, level3key, spaceKey, this);
+        //this.level = new Level(level3Name, level3key, castleKey, this);
         this.level.readLevelImage();
 
         this.cameras.main.setBounds(0, 0, (this.level.src.width) * gridSize, mainHeight);

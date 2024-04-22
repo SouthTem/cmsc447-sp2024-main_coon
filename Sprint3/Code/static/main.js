@@ -23,6 +23,7 @@ var config = {
         Boot,
         Preloader,
         MainMenu,
+        LevelSelect,
         Game,
         GameOver,
         LevelComplete
