@@ -16,6 +16,7 @@ class GameOver extends Phaser.Scene
         this.score = data.score;
         this.coins = data.coins;
         this.completion = data.completion;
+        this.levelData = data.levelData;
     }
 
     create ()
@@ -50,20 +51,46 @@ class GameOver extends Phaser.Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        this.input.once('pointerdown', () => {
-            this.scene.restart('MainMenu');
-            this.scene.start('MainMenu');
+        const retry = this.add.text(314 - 50, centerY + 200, 'Retry', {
+            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5).setInteractive();
 
+        retry.on("pointerover", () => {
+            retry.setStyle({ fill: '#ff0'});
         });
 
-        // restart the game with space
-        this.input.keyboard.on('keydown-SPACE', () => {
-            this.scene.start('Game');
+        retry.on("pointerout", () => {
+            retry.setStyle({ fill: '#FFF'});
+        });
+
+        retry.on("pointerup", () => {
+            this.scene.start('Game', this.levelData);
+        });
+
+        const mainMenu = this.add.text(541, centerY + 200, 'Main Menu', {
+            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5).setInteractive();
+
+        mainMenu.on("pointerover", () => {
+            mainMenu.setStyle({ fill: '#ff0'});
+        });
+
+        mainMenu.on("pointerout", () => {
+            mainMenu.setStyle({ fill: '#FFF'});
+        });
+
+        mainMenu.on("pointerup", () => {
+            this.scene.restart('MainMenu');
+            this.scene.start('MainMenu');
         });
 
         // restart the game with r
         this.input.keyboard.on('keydown-R', () => {
-            this.scene.start('Game');
+            this.scene.start('Game', this.levelData);
         });
     }
 }

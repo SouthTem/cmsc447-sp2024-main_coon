@@ -91,6 +91,7 @@ class Game extends Phaser.Scene
     init(data)
     {
         console.log(data);
+        this.levelData = data;
         this.level = new Level(data.name, data.key, data.sprite, this);
     }
 
@@ -268,7 +269,8 @@ class Game extends Phaser.Scene
             this.scene.start('GameOver', {
                 score: score,
                 coins: score / 20,
-                completion: player.x / this.physics.world.bounds.width
+                completion: player.x / this.physics.world.bounds.width,
+                levelData: this.levelData
             });
         }
 
