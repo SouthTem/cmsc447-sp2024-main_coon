@@ -1,10 +1,8 @@
-//import { Scene } from 'phaser';
-
-class MainMenu extends Phaser.Scene
+class Customize extends Phaser.Scene
 {
     constructor ()
     {
-        super('MainMenu');
+        super('Customize');
     }
 
     create ()
@@ -13,26 +11,6 @@ class MainMenu extends Phaser.Scene
         let centerY = config.height / 2;
 
         this.add.image(centerX, centerY, 'background');
-
-        this.add.image(centerX, centerY - 100, 'logo');
-
-        const playButton = this.createButton(centerX, centerY, 'Play', () =>{
-            this.scene.start('Game', level1Data);
-        });
-
-        this.playButton = playButton;
-
-        const levelButton = this.createButton(centerX, centerY + 100, 'Level Select', () =>{
-            this.scene.start('LevelSelect');
-        });
-
-        this.levelButton = levelButton;
-
-        const customButton = this.createButton(centerX, centerY + 200, 'Customize', () =>{
-            this.scene.start('Customize');
-        });
-
-        this.customButton = customButton;
     }
 
     createButton(x, y, text, clickAction)
