@@ -315,6 +315,7 @@ class Game extends Phaser.Scene
                 score: score,
                 coins: score / 20,
                 name: this.level.name,
+                levelData: this.levelData
             });
         }
 
