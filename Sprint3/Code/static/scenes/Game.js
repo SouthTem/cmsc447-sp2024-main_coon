@@ -4,7 +4,7 @@ var player;
 var fakePlayer;
 
 var coins;
-var floors;
+var spikes;
 var ceilings;
 
 var score;
@@ -88,6 +88,22 @@ class Game extends Phaser.Scene
         return obstacle;
     }
 
+    createSpike(x = 0, y = 0, width = 1, height = 1, sprite = 'spike')
+    {
+        let realWidth = width * gridSize;
+        let realHeight = height * gridSize;
+        let obstacle = spikes.create(x, y, 'spike').setScale(tileScale);
+
+        let v = 0;
+        //obstacle.body.setVelocityX(v);
+        obstacle.setSize(16,16);
+        obstacle.setOrigin(0, 0);
+        obstacle.displayWidth = realWidth;
+        obstacle.displayHeight = realHeight;
+        obstacle.setDepth(gameDepth);
+        return obstacle;
+    }
+
     init(data)
     {
         console.log(data);
@@ -108,7 +124,7 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
-        floors = this.physics.add.group({
+        spikes = this.physics.add.group({
             allowGravity: false,
             immovable: true
         });
@@ -136,7 +152,15 @@ class Game extends Phaser.Scene
         //player.setCollideWorldBounds(true);
 
         this.physics.add.collider(player, ceilings);
-        this.physics.add.collider(player, floors);
+        this.physics.add.collider(player, spikes, (p, s) => {
+            this.level.unload();
+            this.scene.start('GameOver', {
+                score: score,
+                coins: score / 20,
+                completion: player.x / this.physics.world.bounds.width,
+                levelData: this.levelData
+            });
+        });
 
         this.physics.add.overlap(player, coins, this.collectCoin, null, this);
 
@@ -220,6 +244,14 @@ class Game extends Phaser.Scene
         else if (this.isColor(pixel, 0, 0, 255))
         {
             this.createTile(x, y, 1, count, sprite, ceilings);
+        }
+
+        else if (this.isColor(pixel, 255, 0, 0))
+        {
+            for (let i = 0; i < count; ++i)
+            {
+                this.createSpike(x, y + i * gridSize, 1, 1);
+            }
         }
     }
 
