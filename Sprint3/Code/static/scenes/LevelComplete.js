@@ -14,6 +14,7 @@ class LevelComplete extends Phaser.Scene
         this.score = data.score;
         this.coins = data.coins;
         this.name = data.name;
+        this.levelData = data.levelData;
     }
 
     create ()
