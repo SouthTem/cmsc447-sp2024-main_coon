@@ -15,14 +15,16 @@ class Level
     image;
     scene;
     sprite;
+    music;
 
-    constructor(name, image, sprite, scene)
+    constructor(name, image, sprite, music = null, scene)
     {
         this.name = name;
         this.image = image;
         this.scene = scene;
         this.src = scene.textures.get(this.image).getSourceImage();
         this.sprite = sprite;
+        this.music = music;
     }
 
     readLevelImage()
@@ -59,6 +61,12 @@ class Level
 
     unload()
     {
-        this.scene.textures.remove(key);        
+        this.scene.textures.remove(key);
+        
+        if (this.music != null)
+        {
+            console.log(this.music);
+            this.scene.sound.get(this.music).stop();    
+        }
     }
 }

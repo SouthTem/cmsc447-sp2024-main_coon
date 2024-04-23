@@ -16,7 +16,8 @@ class MainMenu extends Phaser.Scene
 
         this.add.image(centerX, centerY - 100, 'logo');
 
-        const playButton = this.createButton(centerX, centerY, 'Play', () =>{
+        const playButton = this.createButton(centerX, centerY, 'Play', () => {
+            this.sound.get('menu').stop();
             this.scene.start('Game', level1Data);
         });
 
@@ -33,6 +34,20 @@ class MainMenu extends Phaser.Scene
         });
 
         this.customButton = customButton;
+
+        let soundConfig = {
+            loop: true,
+            volume: 1,
+        };
+        this.sound.add('menu', soundConfig);
+    }
+
+    update()
+    {
+        if (!this.sound.get('menu').isPlaying)
+        {
+            this.sound.get('menu').play();
+        }
     }
 
     createButton(x, y, text, clickAction)

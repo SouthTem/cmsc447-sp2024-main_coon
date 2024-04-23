@@ -80,10 +80,16 @@ class Preloader extends Phaser.Scene
         this.load.image(level1Data.image, `${level1Data.image}.png`);
         this.load.image(level2Data.image, `${level2Data.image}.png`);
         this.load.image(level3Data.image, `${level3Data.image}.png`);
+
+        this.load.setPath('static/Music');
+
+        this.load.audio('menu', 'Menu.wav');
+        this.load.audio('space', 'Space.wav');
     }
 
     create ()
     {
+        this.sound.unlock();
         //  When all the assets have loaded, it's often worth creating global objects here that the rest of the game can use.
         //  For example, you can define global animations here, so we can use them in other scenes.
 

@@ -93,4 +93,9 @@ class GameOver extends Phaser.Scene
             this.scene.start('Game', this.levelData);
         });
     }
+
+    update()
+    {
+        this.sound.stopAll();
+    }
 }

@@ -2,6 +2,7 @@ const level1Data = {
     name: level1Name,
     key: level1key,
     sprite: woodenKey,
+    music: null,
     difficulty: 1,
     image: 'level1_preview', 
 }
@@ -10,6 +11,7 @@ const level2Data = {
     name: level2Name,
     key: level2key,
     sprite: spaceKey,
+    music: 'space',
     difficulty: 2,
     image: 'level2_preview', 
 }
@@ -18,6 +20,7 @@ const level3Data = {
     name: level3Name,
     key: level3key,
     sprite: castleKey,
+    music: null,
     difficulty: 3,
     image: 'level3_preview', 
 }
@@ -86,6 +89,7 @@ class LevelSelect extends Phaser.Scene
         });
 
         playButton.on("pointerup", () => {
+            this.sound.get('menu').stop();
             this.scene.start('Game', levelsArray[this.index]);
         });
 

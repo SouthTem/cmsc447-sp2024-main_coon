@@ -104,7 +104,7 @@ class Game extends Phaser.Scene
     {
         console.log(data);
         this.levelData = data;
-        this.level = new Level(data.name, data.key, data.sprite, this);
+        this.level = new Level(data.name, data.key, data.sprite, data.music, this);
     }
 
     create()
@@ -184,6 +184,15 @@ class Game extends Phaser.Scene
         });
         scoreText.setDepth(textDepth);
         scoreText.setScrollFactor(0);
+
+        let soundConfig = {
+            loop: true,
+            volume: 1,
+        };
+        if (this.level.music != null)
+        {
+            this.sound.add(this.level.music, soundConfig);
+        }
     }
 
     isColor(pixel, r = 0, g = 0, b = 0)
@@ -354,6 +363,11 @@ class Game extends Phaser.Scene
                 coins.children.entries.splice(i, 1);
                 i--;
             }
+        }
+
+        if (this.level.music != null && !this.sound.get(this.level.music).isPlaying)
+        {
+            this.sound.get(this.level.music).play();
         }
     }
 }
