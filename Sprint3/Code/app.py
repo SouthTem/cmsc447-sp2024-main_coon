@@ -221,7 +221,7 @@ def get_user():
         if player is None:
             raise ValueError('player not found')
 
-        return jsonify({'success': True, 'name': account.username}), 200
+        return jsonify({'success': True, 'name': account.username, 'coins':player.coins}), 200
 
     except Exception as e:
         print(e)

@@ -150,6 +150,7 @@ class Game extends Phaser.Scene
         this.physics.add.collider(player, ceilings);
         this.physics.add.collider(player, spikes, (p, s) => {
             this.level.unload();
+            addCoins(score / 20);
             this.scene.start('GameOver', {
                 score: score,
                 coins: score / 20,
@@ -315,6 +316,7 @@ class Game extends Phaser.Scene
         if (player.x <= this.cameras.main.worldView.x || player.y > mainHeight || player.y < 0)
         {
             this.level.unload();
+            addCoins(score / 20);
             this.scene.start('GameOver', {
                 score: score,
                 coins: score / 20,
@@ -328,6 +330,7 @@ class Game extends Phaser.Scene
         {
             this.level.unload();
             console.log('completion', player.x / this.physics.world.bounds.width);
+            addCoins(score / 20);
             this.scene.start('LevelComplete', {
                 score: score,
                 coins: score / 20,

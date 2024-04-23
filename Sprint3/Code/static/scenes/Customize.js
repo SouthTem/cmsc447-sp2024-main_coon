@@ -5,6 +5,34 @@ class Customize extends Phaser.Scene
         super('Customize');
     }
 
+    coins = 0;
+
+    init(data)
+    {
+        this.getCoinsFromDatabase();
+    }
+
+    getCoinsFromDatabase()
+    {
+        let user = getUser();
+        user.then(json => {
+            console.log(json);
+            let success = json.success;
+            let name = json.name;
+            let coins = json.coins;
+
+            if (success)
+            {
+                this.coins = coins;
+            }
+            else
+            {
+              alert('you are not logged in. Redirecting to login page!');
+              window.location.href = "/login_page";
+            }
+          });
+    }
+
     create ()
     {
         let centerX = config.width / 2;
@@ -13,7 +41,7 @@ class Customize extends Phaser.Scene
         this.add.image(centerX, centerY, 'background');
 
         this.add.image(20, 20, 'coin').setOrigin(0, 0).setScale(2);
-        this.createCost(20 + 40, 20, 1000).setOrigin(0, 0);
+        this.coinText = this.createCost(20 + 40, 20, "").setOrigin(0, 0);
 
         const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
 
@@ -85,5 +113,11 @@ class Customize extends Phaser.Scene
 
 
         return rect;
+    }
+
+    update()
+    {
+        //console.log(this.coins);
+        this.coinText.setText(`${this.coins == 0 ? "" : this.coins}`);
     }
 }

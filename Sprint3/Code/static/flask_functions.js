@@ -178,6 +178,7 @@ function getUser()
 
     var data = {
         name: "",
+        coins: 0,
         success: false,
         message: ''
     };
@@ -212,9 +213,11 @@ function getUser()
     .then(json => {
         let success = json.success;
         let name = json.name;
+        let coins = json.coins;
 
         data.success = success;
         data.name = name;
+        data.coins = coins;
 
         return data;
     })
@@ -229,11 +232,12 @@ function getUser()
  * update the database with a new coin count for the player
  * @param {integer} coins how many to coins (+ or -) to add to the players total
  */
-function addCoins(coins)
+function addCoins(coinCount)
 {
+    console.log(coinCount);
     var data = JSON.stringify
     ({
-        coins: coins
+        coins: coinCount,
     });
 
     const token = get_token()
@@ -241,10 +245,10 @@ function addCoins(coins)
     // can't do anything if token is null
     if (token == null)
     {
-        return Promise.resolve({success: false});
+        return Promise.resolve(false);
     }
 
-    fetch(COIN_ENDPOINT, {
+    return fetch(COIN_ENDPOINT, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -262,10 +266,15 @@ function addCoins(coins)
         return response.json();
     })
     .then(json => {
-        console.log('addCoins', json);
+        let success = json.success;
+
+        if (success) return false;
+
+        return true;
     })
     .catch(error => {
         console.log(error);
+        return false;
     });
 }
 
