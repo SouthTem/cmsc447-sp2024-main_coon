@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from database import setup, db, bcrypt
 import database
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+from sqlalchemy_utils import database_exists
+
 
 default_error_message = "Something has gone wrong. Is the URL incorrect?"
 
@@ -250,10 +252,13 @@ def update_coins():
 
 @app.route('/')
 def index():
-    #ac = database.UserAccount.get_account("test2", "pass")
-    #print(ac)
-    #database.setup()
-
+    # ac = database.UserAccount.get_account("test2", "pass")
+    # print(ac)
+    if database_exists(f"sqlite:///instance/database.db"):
+        print("database exists")
+        return render_template("index.html")
+    database.setup()
+    print("yes")
     return render_template("index.html")
 
 if __name__ == "__main__":
