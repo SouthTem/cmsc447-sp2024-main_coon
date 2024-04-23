@@ -1,4 +1,3 @@
-# cmsc447-sp2024-main_coon
 # How To Run:
 Install virtualenv  
   
@@ -16,3 +15,5 @@ Run the app:
 
 Open the site in any browser:
 `http://localhost:5000/`
+
+

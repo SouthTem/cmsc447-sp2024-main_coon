@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+<div class="container my-5">
+
+    <div class="row">
+
+        <div class="col-lg-3 col-sm-1">
+
+        </div>
+
+        <div class="col-lg-6 col-sm-10">
+            <form id="create_form" action="{{url_for('create')}}" method="POST">
+                
+                <div class="col row-cols-1 bg-secondary-subtle">
+                    <h2 class="bg-dark text-center text-white">Create User</h2>
+                    <div class="container my-5">
+                        <label for: name>Username</label>
+                        <input id="username" class="form-control" type ="text" name="username" required>
+                    </div>
+
+                    <div class="container my-5">
+                        <label for: id>Password</label>
+                        <input id="password" class="form-control" type="password" name="password" required>
+                    </div>
+
+                    <div class="container my-5">
+                        <div class="row row-cols-lg-4 row-cols-sm-1 gap-2 mx-5">
+                            <button type="submit" class="btn btn-secondary">Submit</button>
+                            <div class="container"></div>
+                            <button type="reset" class="btn btn-secondary">Clear</button>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <p>Already have an account?
+                            <a href='{{ url_for("login_page") }}' class="link">Login</a>
+                        </p>
+                    </div>
+                    
+                </div>
+                
+            </form>
+        </div>
+
+        <div class="col-lg-3 col-sm-1">
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="static/create_functions.js"></script>
+{% endblock %}

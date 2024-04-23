@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.js"></script>
+{% endblock %}
+
+{% block title %}Game{% endblock %}
+
+{% block body %}
+
+<div class="container bg-secondary-subtle text-center">
+
+    <div class="container text-center py-4" id="game-div">
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="static/globals.js"></script>
+<script src="static/Level.js"></script>
+<script src="static/scenes/Preloader.js"></script>
+<script src="static/scenes/MainMenu.js"></script>
+<script src="static/scenes/Customize.js"></script>
+<script src="static/scenes/LevelSelect.js"></script>
+<script src="static/scenes/LevelComplete.js"></script>
+<script src="static/scenes/GameOver.js"></script>
+<script src="static/scenes/Game.js"></script>
+<script src="static/scenes/Boot.js"></script>
+<script src="static/main.js"></script>
+{% endblock %}
