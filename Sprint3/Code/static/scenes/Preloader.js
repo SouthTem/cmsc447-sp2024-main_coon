@@ -64,7 +64,7 @@ class Preloader extends Phaser.Scene
         this.load.image(level1key, 'level1.png');
         this.load.image(level2key, 'level2.png');
         this.load.image(level3key, 'level3.png');
-        this.load.image('spike', 'Spike.png');
+        this.load.image('spike', 'Spikes.png');
 
         this.load.image(level1Data.image, `${level1Data.image}.png`);
         this.load.image(level2Data.image, `${level2Data.image}.png`);

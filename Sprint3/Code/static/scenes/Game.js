@@ -88,16 +88,12 @@ class Game extends Phaser.Scene
         return obstacle;
     }
 
-    createSpike(x = 0, y = 0, width = 1, height = 1, sprite = 'spike')
+    createSpike(x = 0, y = 0, width = 1, height = 1)
     {
         let realWidth = width * gridSize;
         let realHeight = height * gridSize;
-        let obstacle = spikes.create(x, y, 'spike').setScale(tileScale);
+        let obstacle = spikes.create(x + 4 * 3, y + 4 * 3, 'spike').setScale(3);
 
-        let v = 0;
-        //obstacle.body.setVelocityX(v);
-        obstacle.setSize(16,16);
-        obstacle.setOrigin(0, 0);
         obstacle.displayWidth = realWidth;
         obstacle.displayHeight = realHeight;
         obstacle.setDepth(gameDepth);
@@ -231,6 +227,11 @@ class Game extends Phaser.Scene
         return true;
     }
 
+    spikeUp(pixel) { return this.isColor(pixel, 255, 0, 0) };
+    spikeDown(pixel) { return this.isColor(pixel, 200, 0, 0) };
+    spikeRight(pixel) { return this.isColor(pixel, 150, 0, 0) };
+    spikeLeft(pixel) { return this.isColor(pixel, 100, 0, 0) };
+
     innerDraw(x, y, sprite, pixel, count)
     {
         if (this.isColor(pixel, 0, 255, 0))
@@ -246,11 +247,18 @@ class Game extends Phaser.Scene
             this.createTile(x, y, 1, count, sprite, ceilings);
         }
 
-        else if (this.isColor(pixel, 255, 0, 0))
+        else
         {
             for (let i = 0; i < count; ++i)
             {
-                this.createSpike(x, y + i * gridSize, 1, 1);
+                if (this.spikeUp(pixel))
+                    this.createSpike(x, y + i * gridSize, 1, 1).body.setSize(8,4).setOffset(0,2);
+                else if (this.spikeDown(pixel))
+                    this.createSpike(x, y + i * gridSize, 1, 1).setFlipY(true).body.setSize(8,4).setOffset(0,2);
+                else if (this.spikeLeft(pixel))
+                    this.createSpike(x, y + i * gridSize, 1, 1).setAngle(270).body.setSize(4,8).setOffset(2,0);
+                else if (this.spikeRight(pixel))
+                    this.createSpike(x, y + i * gridSize, 1, 1).setAngle(90).body.setSize(4,8).setOffset(2,0);
             }
         }
     }
