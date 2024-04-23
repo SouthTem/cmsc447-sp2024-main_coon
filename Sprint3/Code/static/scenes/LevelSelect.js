@@ -25,7 +25,16 @@ const level3Data = {
     image: 'level3_preview', 
 }
 
-const levelsArray = [level1Data, level2Data, level3Data];
+const level5Data = {
+    name: level5Name,
+    key: level5key,
+    sprite: spaceKey,
+    music: null,
+    difficulty: 4,
+    image: 'level3_preview', 
+}
+
+const levelsArray = [level1Data, level2Data, level3Data, level5Data];
 
 class LevelSelect extends Phaser.Scene
 {
