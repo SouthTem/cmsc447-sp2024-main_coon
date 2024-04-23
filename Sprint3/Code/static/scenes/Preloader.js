@@ -26,6 +26,17 @@ class Preloader extends Phaser.Scene
             }
           });
 
+        let populate = populateDatabase(levelsArray);
+        populate.then(json => {
+            console.log(json);
+            let success = json.success;
+
+            if (!success)
+            {
+                alert('database failed to populate');
+            }
+          });
+
         let centerX = config.width / 2;
         let centerY = config.height / 2;
 

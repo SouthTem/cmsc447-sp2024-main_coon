@@ -247,6 +247,48 @@ def update_coins():
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'message':str(e)}), 400
+    
+# this is a debug endpoint we should remove this in production
+# this is just for initializing the database from Phaser
+@app.route('/populate', methods=['POST'])
+def populate_database():
+    try:
+        database.db.create_all()
+        if request.method == "POST":
+
+            levels = request.json.get('levels', None)
+            outfits = request.json.get('outfits', None)
+
+            print('populate',levels, outfits)
+
+            if levels is not None and len(levels) > 0:
+                level_table = database.db.metadata.tables.get('level', None)
+                if level_table is not None:
+                    database.db.metadata.drop_all(database.db.engine, tables=[level_table])
+                    database.db.create_all()
+
+                for level_data in levels:
+                    name = level_data['name']
+                    texture = level_data['key']
+                    difficulty = level_data['difficulty']
+                    lev:database.Level = database.Level(name=name, texture=texture, difficulty=difficulty)
+                    database.db.session.add(lev)
+            
+            if outfits is not None:
+                outfit_table = database.db.metadata.tables['outfit']
+                database.db.metadata.drop_all(database.db.engine, tables=[outfit_table])
+
+                for outfit_data in outfits:
+                    pass
+
+            database.db.session.commit()
+
+            return jsonify({'success':True, 'message':'Populated Database'})
+        
+    except Exception as e:
+        print(e)
+        return jsonify({'success':False, 'message':'Database Failed to populate'})
+
 
 @app.route('/')
 def index():

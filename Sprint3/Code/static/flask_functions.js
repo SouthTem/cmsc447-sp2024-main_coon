@@ -3,6 +3,7 @@ const RUN_ENDPOINT = "/run";
 const COIN_ENDPOINT = "/update_coins"
 const CREATE_ENDPOINT = "/create";
 const USER_ENDPOINT = "/account";
+const POPULATE_ENDPOINT = "/populate";
 
 /**
  * Gets the auth token from storage
@@ -265,5 +266,43 @@ function addCoins(coins)
     })
     .catch(error => {
         console.log(error);
+    });
+}
+
+/**
+ * 
+ * @param {Array} levels 
+ * @param {Array} outfits 
+ */
+function populateDatabase(levels = [], outfits = [])
+{
+    var data = JSON.stringify
+    ({
+        levels: levels,
+        outfits: outfits,
+    });
+
+    return fetch(POPULATE_ENDPOINT, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: data
+    })
+    .then(response => {
+        if (!response.headers.get("content-type")?.includes("application/json"))
+            throw new Error(`Expected a json response from ${POPULATE_ENDPOINT}`);
+
+        if (!response.ok) 
+            throw new Error(`Response from ${POPULATE_ENDPOINT} was not ok`);
+        
+        return response.json();
+    })
+    .then(json => {
+        return json;
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        return false;
     });
 }
