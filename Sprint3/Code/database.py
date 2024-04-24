@@ -16,9 +16,19 @@ unlocked_outfit = Table("unlocked_outfit", db.Model.metadata,
                       Column("outfit_id", ForeignKey("outfit.id"), primary_key=True),
                       )
 
+equipped_outfit = Table("equipped_outfit", db.Model.metadata,
+                      Column("player_id", ForeignKey("player.id"), primary_key=True),
+                      Column("outfit_id", ForeignKey("outfit.id"), primary_key=True),
+                      )
+
 unlocked_level = Table("unlocked_level", db.Model.metadata,
                       Column("player_id", ForeignKey("player.id"), primary_key=True),
                       Column("level_id", ForeignKey("level.id"), primary_key=True),
+                      )
+
+player_last_level = Table("player_last_level", db.Model.metadata,
+                      Column("player_id", ForeignKey("player.id"), primary_key=True),
+                      Column("level_id", ForeignKey("level.id")),
                       )
 
 player_run = Table("player_run", db.Model.metadata,
@@ -69,8 +79,13 @@ class Player(db.Model):
     coins: Mapped[int] = mapped_column(nullable=False, default=0)
 
     account_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"), unique=True)
+
     outfits: Mapped[list['Outfit']] = relationship(secondary=unlocked_outfit)
+    equipped_outfits: Mapped[list['Outfit']] = relationship(secondary=equipped_outfit)
+
     levels: Mapped[list['Level']] = relationship(secondary=unlocked_level)
+    last_level: Mapped['Level'] = relationship(secondary=player_last_level)
+
     runs: Mapped[list['Run']] = relationship(secondary=player_run)
 
     def __str__(self) -> str:

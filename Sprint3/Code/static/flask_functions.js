@@ -179,6 +179,7 @@ function getUser()
     var data = {
         name: "",
         coins: 0,
+        lastLevel: "",
         success: false,
         message: ''
     };
@@ -214,10 +215,12 @@ function getUser()
         let success = json.success;
         let name = json.name;
         let coins = json.coins;
+        let lastLevel = json.lastLevel;
 
         data.success = success;
         data.name = name;
         data.coins = coins;
+        data.lastLevel = lastLevel;
 
         return data;
     })
@@ -279,9 +282,9 @@ function addCoins(coinCount)
 }
 
 /**
- * 
- * @param {Array} levels 
- * @param {Array} outfits 
+ * Populates the database based on the data passed in
+ * @param {Array} levels the level data to update with
+ * @param {Array} outfits the outfit data to update with
  */
 function populateDatabase(levels = [], outfits = [])
 {

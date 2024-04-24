@@ -26,7 +26,7 @@ class Preloader extends Phaser.Scene
             }
           });
 
-        let populate = populateDatabase(levelsArray);
+        let populate = populateDatabase(levelsArray, skinArray.concat(capesArray).concat(hatsArray));
         populate.then(json => {
             console.log(json);
             let success = json.success;

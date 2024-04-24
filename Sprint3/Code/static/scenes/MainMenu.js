@@ -2,12 +2,12 @@
 
 class MainMenu extends Phaser.Scene
 {
-    constructor ()
+    constructor()
     {
         super('MainMenu');
     }
 
-    create ()
+    create()
     {
         let centerX = config.width / 2;
         let centerY = config.height / 2;
@@ -16,20 +16,56 @@ class MainMenu extends Phaser.Scene
 
         this.add.image(centerX, centerY - 100, 'logo');
 
-        const playButton = this.createButton(centerX, centerY, 'Play', () => {
+        const playButton = this.createButton(centerX, centerY, 'Play', () =>
+        {
             this.sound.get('menu').stop();
-            this.scene.start('Game', level1Data);
+
+            let user = getUser();
+            let levelData = null;
+            user.then(json =>
+            {
+                console.log(json);
+                let success = json.success;
+                let lastLevel = json.lastLevel;
+                console.log('click', lastLevel);
+                if (success)
+                {
+                    for (let i = 0; i < levelsArray.length; ++i)
+                    {
+                        if (lastLevel == levelsArray[i].name)
+                        {
+                            levelData = levelsArray[i];
+                        }
+                    }
+
+                    if (levelData != null)
+                        this.scene.start('Game', levelData);
+                    else
+                        this.scene.start('Game', level1Data);
+                }
+                else
+                {
+                    alert('you are not logged in. Redirecting to login page!');
+                    window.location.href = "/login_page";
+                }
+            });
+
+            console.log('levelData', levelData);
+
+
         });
 
         this.playButton = playButton;
 
-        const levelButton = this.createButton(centerX, centerY + 100, 'Level Select', () =>{
+        const levelButton = this.createButton(centerX, centerY + 100, 'Level Select', () =>
+        {
             this.scene.start('LevelSelect');
         });
 
         this.levelButton = levelButton;
 
-        const customButton = this.createButton(centerX, centerY + 200, 'Customize', () =>{
+        const customButton = this.createButton(centerX, centerY + 200, 'Customize', () =>
+        {
             this.scene.start('Customize');
         });
 
@@ -58,15 +94,18 @@ class MainMenu extends Phaser.Scene
             align: 'center'
         }).setOrigin(0.5).setInteractive();
 
-        levelButton.on("pointerover", () => {
-            levelButton.setStyle({ fill: '#ff0'});
+        levelButton.on("pointerover", () =>
+        {
+            levelButton.setStyle({ fill: '#ff0' });
         });
 
-        levelButton.on("pointerout", () => {
-            levelButton.setStyle({ fill: '#FFF'});
+        levelButton.on("pointerout", () =>
+        {
+            levelButton.setStyle({ fill: '#FFF' });
         });
 
-        levelButton.on("pointerup", () => {
+        levelButton.on("pointerup", () =>
+        {
             clickAction();
         });
 

@@ -194,6 +194,7 @@ def add_run():
         
         new_run:database.Run = database.Run(points=points, coins=coins, level_id=found_level.id)
         player.runs.append(new_run)
+        player.last_level = found_level
         print(player.runs)
         database.db.session.commit()
         return jsonify({'success': True}), 200
@@ -221,7 +222,10 @@ def get_user():
         if player is None:
             raise ValueError('player not found')
 
-        return jsonify({'success': True, 'name': account.username, 'coins':player.coins}), 200
+        return jsonify({'success': True, 
+                        'name': account.username, 
+                        'coins':player.coins,
+                        'lastLevel':player.last_level.name}), 200
 
     except Exception as e:
         print(e)
@@ -249,6 +253,7 @@ def update_coins():
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'message':str(e)}), 400
+
     
 # this is a debug endpoint we should remove this in production
 # this is just for initializing the database from Phaser
@@ -277,11 +282,16 @@ def populate_database():
                     database.db.session.add(lev)
             
             if outfits is not None:
-                outfit_table = database.db.metadata.tables['outfit']
+                outfit_table = database.db.metadata.tables.get('outfit', None)
                 database.db.metadata.drop_all(database.db.engine, tables=[outfit_table])
+                database.db.create_all()
 
                 for outfit_data in outfits:
-                    pass
+                    name = outfit_data['name']
+                    texture = outfit_data['sprite']
+                    cost = outfit_data['cost']
+                    outfit:database.Outfit = database.Outfit(name=name, texture=texture, cost=cost)
+                    database.db.session.add(outfit)
 
             database.db.session.commit()
 
