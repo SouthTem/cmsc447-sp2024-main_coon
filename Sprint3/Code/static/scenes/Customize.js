@@ -5,7 +5,7 @@ class Customize extends Phaser.Scene
         super('Customize');
     }
 
-    coins = 0;
+    coins = -1;
 
     init(data)
     {
@@ -88,7 +88,7 @@ class Customize extends Phaser.Scene
         for (let i = 0; i < 3; ++i)
         {
             this.createButton(startX + i * gapX, hatsText.y + yPadding, () => {});
-            this.createCost(startX + i * gapX, hatsText.y + yPadding + 50, 300);
+            this.createCost(startX + i * gapX, hatsText.y + yPadding + 50, '300');
         }
     }
 
@@ -105,10 +105,24 @@ class Customize extends Phaser.Scene
 
     createButton(x, y, clickAction)
     {
-        const rect = this.add.rectangle(x, y, 24 * 3, 24 * 3, '#ffffff');
+        let color = "0xbbbbbb";
+        const rect = this.add.rectangle(x, y, 24 * 3, 24 * 3, color);
+
+        this.add.image(x, y, 'dog').setScale(2);
         rect.setInteractive();
         rect.on("pointerup", () => {
             clickAction();
+            
+            // use this for if the item is equipped or not
+            rect.setStrokeStyle(4, "0xffffff");
+        });
+
+        rect.on("pointerover", () =>{
+            rect.fillColor = '0xffff00';
+        });
+
+        rect.on("pointerout", () =>{
+            rect.fillColor = color;
         });
 
 
@@ -118,6 +132,6 @@ class Customize extends Phaser.Scene
     update()
     {
         //console.log(this.coins);
-        this.coinText.setText(`${this.coins == 0 ? "" : this.coins}`);
+        this.coinText.setText(`${this.coins < 0 ? "" : this.coins}`);
     }
 }
