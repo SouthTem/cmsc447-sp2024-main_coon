@@ -68,10 +68,10 @@ class Preloader extends Phaser.Scene
         this.load.image('coin', 'Coin.png');
         this.load.image('background', 'bg.png');
         this.load.image('logo', 'logo.png');
-        this.load.image('ground', 'platform.png');
+        //this.load.image('ground', 'platform.png');
         this.load.spritesheet('dog', 'Dog.png', { frameWidth: 24, frameHeight: 18 });
-        this.load.image('star', 'star.png');
-        this.load.spritesheet('dude', 'dude.png', { frameWidth: 32, frameHeight: 48 });
+        //this.load.image('star', 'star.png');
+        //this.load.spritesheet('dude', 'dude.png', { frameWidth: 32, frameHeight: 48 });
         this.load.image(level1key, 'level1.png');
         this.load.image(level2key, 'level2.png');
         this.load.image(level3key, 'level3.png');
@@ -80,6 +80,24 @@ class Preloader extends Phaser.Scene
         this.load.image(level1Data.image, `${level1Data.image}.png`);
         this.load.image(level2Data.image, `${level2Data.image}.png`);
         this.load.image(level3Data.image, `${level3Data.image}.png`);
+
+        for (let i = 0; i < skinArray.length; ++i)
+        {
+            let curr = skinArray[i];
+            this.load.image(curr.sprite, `${curr.sprite}.png`);
+        }
+
+        for (let i = 0; i < capesArray.length; ++i)
+        {
+            let curr = capesArray[i];
+            this.load.image(curr.sprite, `${curr.sprite}.png`);
+        }
+
+        for (let i = 0; i < hatsArray.length; ++i)
+        {
+            let curr = hatsArray[i];
+            this.load.image(curr.sprite, `${curr.sprite}.png`);
+        }
 
         this.load.setPath('static/Music');
 
