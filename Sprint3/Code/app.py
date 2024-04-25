@@ -267,6 +267,40 @@ def update_coins():
     except Exception as e:
         print(e)
         return jsonify({'success': False, 'message':str(e)}), 400
+    
+@app.route('/outfit', methods=['POST'])
+@jwt_required()
+def update_outfit():
+    try:
+        data:dict = request.json
+        print(data)
+
+        current_account_id = get_jwt_identity()
+
+        player:database.Player = database.Player.query.filter_by(id=current_account_id).one_or_none()
+
+        for entry in data:
+            found:database.Outfit = next(filter(lambda x: x.name == entry['name'], player.equipped_outfits), None)
+
+            if not entry['equipped'] and found is not None:
+                player.equipped_outfits.remove(found)
+
+            if entry['equipped'] and found is None:
+                player.equipped_outfits.append(database.Outfit.query.filter_by(name=entry['name']).first())
+
+            found:database.Outfit = next(filter(lambda x: x.name == entry['name'], player.outfits), None)
+
+            if not entry['obtained'] and found is not None:
+                player.outfits.remove(found)
+
+            if entry['obtained'] and found is None:
+                player.outfits.append(database.Outfit.query.filter_by(name=entry['name']).first())
+            
+        database.db.session.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        print(e)
+        return jsonify({'success': False, 'message':str(e)}), 400
 
     
 # this is a debug endpoint we should remove this in production
@@ -309,18 +343,6 @@ def populate_database():
                     outfit:database.Outfit = database.Outfit(name=name, texture=texture, cost=cost)
 
                     database.db.session.add(outfit)
-
-                    # enable the default outfits for all players
-                    if (obtained or equipped):
-                        p:database.Player = None
-                        for p in database.Player.query.all():
-                            try:
-                                if equipped:
-                                    p.equipped_outfits.append(outfit)
-                                if obtained:
-                                    p.outfits.append(outfit)
-                            except Exception as e:
-                                print(e)
 
                     
 

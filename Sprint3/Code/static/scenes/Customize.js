@@ -3,7 +3,7 @@ const skin1 = {
     sprite: "dog",
     cost: 100,
     obtained: true,
-    equipped: true,
+    equipped: false,
 };
 
 const skin2 = {
@@ -131,6 +131,13 @@ class Customize extends Phaser.Scene
                         found.equipped = true;
                     }
                 }
+
+                if (skinArray.find(x => x.equipped) == undefined)
+                {
+                    skin1.obtained = true;
+                    skin1.equipped = true;
+                    changeOutfit(skinArray)
+                }
             }
             else
             {
@@ -223,6 +230,7 @@ class Customize extends Phaser.Scene
                 if (this.coins < button.data.cost) return;
 
                 this.coins -= button.data.cost;
+                addCoins(-button.data.cost);
                 button.data.obtained = true;
             }
 
@@ -233,6 +241,8 @@ class Customize extends Phaser.Scene
 
                 array[i].equipped = false;
             }
+
+            changeOutfit(array);
         };
 
         return button;

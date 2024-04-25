@@ -4,6 +4,7 @@ const COIN_ENDPOINT = "/update_coins"
 const CREATE_ENDPOINT = "/create";
 const USER_ENDPOINT = "/account";
 const POPULATE_ENDPOINT = "/populate";
+const OUTFIT_ENDPOINT = "/outfit"
 
 /**
  * Gets the auth token from storage
@@ -271,6 +272,54 @@ function addCoins(coinCount)
 
         if (!response.ok) 
             throw new Error(`Response from ${COIN_ENDPOINT} was not ok`);
+        
+        return response.json();
+    })
+    .then(json => {
+        let success = json.success;
+
+        if (success) return false;
+
+        return true;
+    })
+    .catch(error => {
+        console.log(error);
+        return false;
+    });
+}
+
+/**
+ * Updates the database with outfit related information
+ * 
+ * @param {Array} outfits list of outfits to update
+ */
+function changeOutfit(outfits)
+{
+    var data = JSON.stringify(outfits);
+    console.log(data);
+
+    const token = get_token()
+
+    // can't do anything if token is null
+    if (token == null)
+    {
+        return Promise.resolve(false);
+    }
+
+    return fetch(OUTFIT_ENDPOINT, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + token
+        },
+        body: data
+    })
+    .then(response => {
+        if (!response.headers.get("content-type")?.includes("application/json"))
+            throw new Error(`Expected a json response from ${OUTFIT_ENDPOINT}`);
+
+        if (!response.ok) 
+            throw new Error(`Response from ${OUTFIT_ENDPOINT} was not ok`);
         
         return response.json();
     })
