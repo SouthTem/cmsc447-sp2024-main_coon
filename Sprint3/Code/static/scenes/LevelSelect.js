@@ -116,6 +116,14 @@ class LevelSelect extends Phaser.Scene
             this.updateIndex(this.index + 1);
         });
 
+        this.input.keyboard.on('keydown-LEFT', () => {
+            this.updateIndex(this.index - 1);
+        });
+
+        this.input.keyboard.on('keydown-RIGHT', () => {
+            this.updateIndex(this.index + 1);
+        });
+
         this.updateIndex(0);
     }
 
