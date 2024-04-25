@@ -12,7 +12,9 @@ class MainMenu extends Phaser.Scene
         let centerX = config.width / 2;
         let centerY = config.height / 2;
 
-        this.add.image(centerX, centerY, 'background');
+        let bg = this.add.image(centerX, centerY, 'bg_sunset');
+        bg.displayWidth = config.width;
+        bg.displayHeight = config.height;
 
         this.add.image(centerX, centerY - 100, 'logo');
 

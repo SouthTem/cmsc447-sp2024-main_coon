@@ -104,12 +104,14 @@ class Game extends Phaser.Scene
     {
         console.log(data);
         this.levelData = data;
-        this.level = new Level(data.name, data.key, data.sprite, data.music, this);
+        this.level = new Level(data.name, data.key, data.sprite, data.music, data.bg, this);
     }
 
     create()
     {
-        let bg = this.add.image(400, 300, 'sky');
+        let bg = this.add.image(400, 300, this.level.bg);
+        bg.displayWidth = config.width;
+        bg.displayHeight = config.height;
         gravity = config.physics.arcade.gravity.y;
         score = 0;
         isFlipped = false;

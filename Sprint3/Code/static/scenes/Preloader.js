@@ -81,6 +81,11 @@ class Preloader extends Phaser.Scene
         this.load.image(level2Data.image, `${level2Data.image}.png`);
         this.load.image(level3Data.image, `${level3Data.image}.png`);
 
+        this.load.image('bg_castle', 'bg_castle.png');
+        this.load.image('bg_space', 'bg_space.png');
+        this.load.image('bg_sunset', 'bg_sunset.png');
+        this.load.image('bg_town', 'bg_town.png');
+
         for (let i = 0; i < skinArray.length; ++i)
         {
             let curr = skinArray[i];

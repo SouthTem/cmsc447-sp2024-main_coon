@@ -4,6 +4,7 @@ const level1Data = {
     sprite: woodenKey,
     music: null,
     difficulty: 1,
+    bg: 'bg_town',
     image: 'level1_preview', 
 }
 
@@ -13,6 +14,7 @@ const level2Data = {
     sprite: spaceKey,
     music: 'space',
     difficulty: 2,
+    bg: 'bg_space',
     image: 'level2_preview', 
 }
 
@@ -22,6 +24,7 @@ const level3Data = {
     sprite: castleKey,
     music: null,
     difficulty: 3,
+    bg: 'bg_castle',
     image: 'level3_preview', 
 }
 

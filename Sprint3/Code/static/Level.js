@@ -15,9 +15,10 @@ class Level
     image;
     scene;
     sprite;
+    bg;
     music;
 
-    constructor(name, image, sprite, music = null, scene)
+    constructor(name, image, sprite, music = null, bg, scene)
     {
         this.name = name;
         this.image = image;
@@ -25,6 +26,7 @@ class Level
         this.src = scene.textures.get(this.image).getSourceImage();
         this.sprite = sprite;
         this.music = music;
+        this.bg = bg;
     }
 
     readLevelImage()
