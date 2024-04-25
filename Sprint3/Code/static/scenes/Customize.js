@@ -88,63 +88,7 @@ class Customize extends Phaser.Scene
         this.skinButtons = [];
         this.capeButtons = [];
         this.hatButtons = [];
-        this.coins = -1;
-        this.getCoinsFromDatabase();
-    }
-
-    getCoinsFromDatabase()
-    {
-        let user = getUser();
-        return user.then(json =>
-        {
-            console.log(json);
-            let success = json.success;
-            let name = json.name;
-            let coins = json.coins;
-            let unlockedOutfits = json.unlockedOutfits;
-            let equippedOutfits = json.equippedOutfits;
-
-            if (success)
-            {
-                this.coins = coins;
-
-                for (let i = 0; i < unlockedOutfits.length; ++i)
-                {
-                    let found = skinArray.find(x => x.name == unlockedOutfits[i]) ??
-                        capesArray.find(x => x.name == unlockedOutfits[i]) ??
-                        hatsArray.find(x => x.name == unlockedOutfits[i]);
-
-                    if (found != undefined)
-                    {
-                        found.obtained = true;
-                    }
-                }
-
-                for (let i = 0; i < equippedOutfits.length; ++i)
-                {
-                    let found = skinArray.find(x => x.name == equippedOutfits[i]) ??
-                        capesArray.find(x => x.name == equippedOutfits[i]) ??
-                        hatsArray.find(x => x.name == equippedOutfits[i]);
-
-                    if (found != undefined)
-                    {
-                        found.equipped = true;
-                    }
-                }
-
-                if (skinArray.find(x => x.equipped) == undefined)
-                {
-                    skin1.obtained = true;
-                    skin1.equipped = true;
-                    changeOutfit(skinArray)
-                }
-            }
-            else
-            {
-                alert('you are not logged in. Redirecting to login page!');
-                window.location.href = "/login_page";
-            }
-        });
+        this.coins = data.coins;
     }
 
     create()
