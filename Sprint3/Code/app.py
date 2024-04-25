@@ -4,6 +4,8 @@ from database import setup, db, bcrypt
 import database
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from sqlalchemy_utils import database_exists
+import requests
+import json
 
 
 default_error_message = "Something has gone wrong. Is the URL incorrect?"
@@ -169,6 +171,48 @@ def leaderboard():
             data.append([player_account.username, level.name, run.points, run.coins, run.create_time.strftime("%m/%d/%Y %I:%M %p")])
 
     return render_template('scoreboard.html', data=data)
+
+@app.route('/top_leaderboard', methods=['GET'])
+def top_leaderboard():
+    try:
+        players_points = []
+        player:database.Player = None
+        for player in database.Player.query.all():
+            player_account:database.UserAccount = database.UserAccount.query.get(ident=player.account_id)
+            total_points = 0
+            level:database.Level = None
+            for level in database.Level.query.all():
+                runs_per_level = list(filter(lambda x: x.level_id == level.id, player.runs))
+                if runs_per_level is not None and len(runs_per_level) > 0:
+                    total_points += max(runs_per_level, key=lambda x: x.points).points
+
+            players_points.append([player_account.username, total_points])
+
+        players_points.sort(key=lambda x: x[1], reverse=True)
+
+        data = {
+            "Group": "main coon",
+            "Title": "Top 5 Scores",
+        }
+
+        for i in range(0, 5):
+            if i >= len(players_points):
+                break
+
+            data[f"{players_points[i][0]}"] = f"{players_points[i][1]}"
+
+        json_data = json.dumps({"data": [data]})
+        print(json_data)
+
+        uri = 'https://eope3o6d7z7e2cc.m.pipedream.net'
+
+        res = requests.post(uri, data=json_data)
+        print(res)
+
+        return jsonify({'success':True, 'data':json_data})
+    except Exception as e:
+        print(e)
+        return jsonify({'success':False})
     
 @app.route('/run', methods=['POST'])
 @jwt_required()

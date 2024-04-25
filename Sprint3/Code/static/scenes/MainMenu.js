@@ -18,6 +18,15 @@ class MainMenu extends Phaser.Scene
 
         this.add.image(centerX, centerY - 100, 'logo');
 
+        const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
+
+        homeRect.setInteractive();
+        homeRect.on("pointerup", () => {
+            getLeaderboard().then( (data) =>{
+                console.log(data);
+            });
+        });
+
         const playButton = this.createButton(centerX, centerY, 'Play', () =>
         {
             this.sound.get(musicMenuKey).stop();

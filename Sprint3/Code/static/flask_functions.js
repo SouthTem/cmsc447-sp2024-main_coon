@@ -4,7 +4,8 @@ const COIN_ENDPOINT = "/update_coins"
 const CREATE_ENDPOINT = "/create";
 const USER_ENDPOINT = "/account";
 const POPULATE_ENDPOINT = "/populate";
-const OUTFIT_ENDPOINT = "/outfit"
+const OUTFIT_ENDPOINT = "/outfit";
+const TOP_ENDPOINT = "/top_leaderboard";
 
 /**
  * Gets the auth token from storage
@@ -332,6 +333,36 @@ function changeOutfit(outfits)
     })
     .catch(error => {
         console.log(error);
+        return false;
+    });
+}
+
+function getLeaderboard()
+{
+    return fetch(TOP_ENDPOINT, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then(response => {
+        if (!response.headers.get("content-type")?.includes("application/json"))
+            throw new Error(`Expected a json response from ${TOP_ENDPOINT}`);
+
+        if (!response.ok)
+        {
+            console.warn(response.json())
+            throw new Error(`Response from ${TOP_ENDPOINT} was not ok`);
+        }
+        
+        return response.json();
+    })
+    .then(json => {
+        if (!json.success) return false;
+
+        return true;
+    })
+    .catch(error => {
         return false;
     });
 }
