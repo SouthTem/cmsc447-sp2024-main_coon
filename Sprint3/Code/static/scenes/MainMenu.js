@@ -21,24 +21,16 @@ class MainMenu extends Phaser.Scene
             this.sound.get('menu').stop();
 
             let user = getUser();
-            let levelData = null;
+            let levelData = undefined;
             user.then(json =>
             {
-                console.log(json);
                 let success = json.success;
                 let lastLevel = json.lastLevel;
-                console.log('click', lastLevel);
                 if (success)
                 {
-                    for (let i = 0; i < levelsArray.length; ++i)
-                    {
-                        if (lastLevel == levelsArray[i].name)
-                        {
-                            levelData = levelsArray[i];
-                        }
-                    }
+                    levelData = levelsArray.find(x => x.name == lastLevel)
 
-                    if (levelData != null)
+                    if (levelData != undefined)
                         this.scene.start('Game', levelData);
                     else
                         this.scene.start('Game', level1Data);
@@ -49,10 +41,6 @@ class MainMenu extends Phaser.Scene
                     window.location.href = "/login_page";
                 }
             });
-
-            console.log('levelData', levelData);
-
-
         });
 
         this.playButton = playButton;

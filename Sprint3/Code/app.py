@@ -221,11 +221,25 @@ def get_user():
 
         if player is None:
             raise ValueError('player not found')
+        
+        unlocked_outfits = []
+        if player.outfits is not None and len(player.outfits) > 0:
+            unlocked_outfits = list(map(lambda x: x.name, player.outfits))
+
+        equipped_outfits = []
+        if equipped_outfits is not None and len(player.equipped_outfits) > 0:
+            equipped_outfits = list(map(lambda x: x.name, player.equipped_outfits))
+
+        lastLevel = ''
+        if player.last_level is not None:
+            lastLevel = player.last_level.name
 
         return jsonify({'success': True, 
                         'name': account.username, 
                         'coins':player.coins,
-                        'lastLevel':player.last_level.name}), 200
+                        'lastLevel':lastLevel,
+                        'equippedOutfits': equipped_outfits,
+                        'unlockedOutfits': unlocked_outfits}), 200
 
     except Exception as e:
         print(e)
@@ -290,8 +304,25 @@ def populate_database():
                     name = outfit_data['name']
                     texture = outfit_data['sprite']
                     cost = outfit_data['cost']
+                    obtained = outfit_data['obtained']
+                    equipped = outfit_data['equipped']
                     outfit:database.Outfit = database.Outfit(name=name, texture=texture, cost=cost)
+
                     database.db.session.add(outfit)
+
+                    # enable the default outfits for all players
+                    if (obtained or equipped):
+                        p:database.Player = None
+                        for p in database.Player.query.all():
+                            try:
+                                if equipped:
+                                    p.equipped_outfits.append(outfit)
+                                if obtained:
+                                    p.outfits.append(outfit)
+                            except Exception as e:
+                                print(e)
+
+                    
 
             database.db.session.commit()
 

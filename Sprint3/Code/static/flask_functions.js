@@ -181,6 +181,8 @@ function getUser()
         coins: 0,
         lastLevel: "",
         success: false,
+        equippedOutfits: [],
+        unlockedOutfits: [],
         message: ''
     };
 
@@ -216,11 +218,15 @@ function getUser()
         let name = json.name;
         let coins = json.coins;
         let lastLevel = json.lastLevel;
+        let equippedOutfits = json.equippedOutfits;
+        let unlockedOutfits = json.unlockedOutfits;
 
         data.success = success;
         data.name = name;
         data.coins = coins;
         data.lastLevel = lastLevel;
+        data.equippedOutfits = equippedOutfits;
+        data.unlockedOutfits = unlockedOutfits;
 
         return data;
     })

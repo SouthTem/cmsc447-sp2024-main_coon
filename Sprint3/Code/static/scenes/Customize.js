@@ -2,8 +2,8 @@ const skin1 = {
     name: "Skin 1",
     sprite: "dog",
     cost: 100,
-    obtained: false,
-    equipped: false,
+    obtained: true,
+    equipped: true,
 };
 
 const skin2 = {
@@ -76,49 +76,71 @@ const hat3 = {
 
 const hatsArray = [hat1, hat2, hat3];
 
-
-
-
 class Customize extends Phaser.Scene
 {
-    constructor ()
+    constructor()
     {
         super('Customize');
     }
 
-    skinButtons = [];
-    capeButtons = [];
-    hatButtons = [];
-
-    coins = -1;
-
     init(data)
     {
+        this.skinButtons = [];
+        this.capeButtons = [];
+        this.hatButtons = [];
+        this.coins = -1;
         this.getCoinsFromDatabase();
     }
 
     getCoinsFromDatabase()
     {
         let user = getUser();
-        user.then(json => {
+        return user.then(json =>
+        {
             console.log(json);
             let success = json.success;
             let name = json.name;
             let coins = json.coins;
+            let unlockedOutfits = json.unlockedOutfits;
+            let equippedOutfits = json.equippedOutfits;
 
             if (success)
             {
                 this.coins = coins;
+
+                for (let i = 0; i < unlockedOutfits.length; ++i)
+                {
+                    let found = skinArray.find(x => x.name == unlockedOutfits[i]) ??
+                        capesArray.find(x => x.name == unlockedOutfits[i]) ??
+                        hatsArray.find(x => x.name == unlockedOutfits[i]);
+
+                    if (found != undefined)
+                    {
+                        found.obtained = true;
+                    }
+                }
+
+                for (let i = 0; i < equippedOutfits.length; ++i)
+                {
+                    let found = skinArray.find(x => x.name == equippedOutfits[i]) ??
+                        capesArray.find(x => x.name == equippedOutfits[i]) ??
+                        hatsArray.find(x => x.name == equippedOutfits[i]);
+
+                    if (found != undefined)
+                    {
+                        found.equipped = true;
+                    }
+                }
             }
             else
             {
-              alert('you are not logged in. Redirecting to login page!');
-              window.location.href = "/login_page";
+                alert('you are not logged in. Redirecting to login page!');
+                window.location.href = "/login_page";
             }
-          });
+        });
     }
 
-    create ()
+    create()
     {
         let centerX = config.width / 2;
         let centerY = config.height / 2;
@@ -131,7 +153,8 @@ class Customize extends Phaser.Scene
         const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
 
         homeRect.setInteractive();
-        homeRect.on("pointerup", () => {
+        homeRect.on("pointerup", () =>
+        {
             this.scene.start("MainMenu");
         });
 
@@ -193,17 +216,22 @@ class Customize extends Phaser.Scene
 
     createButtonFunctional(button, array = skinArray)
     {
-        button.clickAction = () => {
+        button.clickAction = () =>
+        {
+            if (!button.data.obtained)
+            {
+                if (this.coins < button.data.cost) return;
+
+                this.coins -= button.data.cost;
+                button.data.obtained = true;
+            }
+
+            button.data.equipped = array == skinArray ? true : !button.data.equipped;
             for (let i = 0; i < array.length; ++i)
             {
-                let curr = array[i];
-                if (curr == button.data)
-                {
-                    array[i].equipped = true;
-                }else
-                {
-                    array[i].equipped = false;
-                }
+                if (button.data == array[i]) continue;
+
+                array[i].equipped = false;
             }
         };
 
@@ -215,7 +243,7 @@ class Customize extends Phaser.Scene
         //console.log(this.coins);
         this.coinText.setText(`${this.coins < 0 ? "" : this.coins}`);
 
-        for(let i = 0; i < this.skinButtons.length; ++i)
+        for (let i = 0; i < this.skinButtons.length; ++i)
         {
             let curr = this.skinButtons[i];
             curr.update();
@@ -231,7 +259,7 @@ class Button
         this.x = x;
         this.y = y;
         this.data = data;
-        this.clickAction = () => {};
+        this.clickAction = () => { };
         this.create();
     }
 
@@ -248,15 +276,18 @@ class Button
 
         this.scene.add.image(this.x, this.y, this.data.sprite).setScale(2);
         rect.setInteractive();
-        rect.on("pointerup", () => {
+        rect.on("pointerup", () =>
+        {
             this.clickAction();
         });
 
-        rect.on("pointerover", () =>{
+        rect.on("pointerover", () =>
+        {
             rect.fillColor = '0xffff00';
         });
 
-        rect.on("pointerout", () =>{
+        rect.on("pointerout", () =>
+        {
             rect.fillColor = color;
         });
 
