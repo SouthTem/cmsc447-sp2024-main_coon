@@ -67,7 +67,6 @@ class Level
         
         if (this.music != null)
         {
-            console.log(this.music);
             this.scene.sound.get(this.music).stop();    
         }
     }

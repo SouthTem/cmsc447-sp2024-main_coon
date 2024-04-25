@@ -81,10 +81,10 @@ class Preloader extends Phaser.Scene
         this.load.image(level2Data.image, `${level2Data.image}.png`);
         this.load.image(level3Data.image, `${level3Data.image}.png`);
 
-        this.load.image('bg_castle', 'bg_castle.png');
-        this.load.image('bg_space', 'bg_space.png');
-        this.load.image('bg_sunset', 'bg_sunset.png');
-        this.load.image('bg_town', 'bg_town.png');
+        this.load.image(backgroundCastle, 'bg_castle.png');
+        this.load.image(backgroundSpace, 'bg_space.png');
+        this.load.image(backgroundSunset, 'bg_sunset.png');
+        this.load.image(backgroundTown, 'bg_town.png');
 
         for (let i = 0; i < skinArray.length; ++i)
         {
@@ -106,8 +106,9 @@ class Preloader extends Phaser.Scene
 
         this.load.setPath('static/Music');
 
-        this.load.audio('menu', 'Menu.wav');
-        this.load.audio('space', 'Space.wav');
+        this.load.audio(musicMenuKey, 'Menu.wav');
+        this.load.audio(musicSpaceKey, 'Space.wav');
+        this.load.audio(musicCastleKey, 'Castle.wav');
     }
 
     create ()

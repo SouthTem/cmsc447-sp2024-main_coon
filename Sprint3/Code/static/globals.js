@@ -14,3 +14,12 @@ const level3Name = 'Hard Level';
 const woodenKey = 'wooden';
 const castleKey = 'castle';
 const spaceKey = 'space';
+
+const musicSpaceKey = 'music_space';
+const musicCastleKey = 'music_castle';
+const musicMenuKey = 'music_menu';
+
+const backgroundCastle = 'bg_castle';
+const backgroundSpace = 'bg_space';
+const backgroundSunset = 'bg_sunset';
+const backgroundTown = 'bg_town';

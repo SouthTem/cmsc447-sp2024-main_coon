@@ -12,7 +12,7 @@ class MainMenu extends Phaser.Scene
         let centerX = config.width / 2;
         let centerY = config.height / 2;
 
-        let bg = this.add.image(centerX, centerY, 'bg_sunset');
+        let bg = this.add.image(centerX, centerY, backgroundSunset);
         bg.displayWidth = config.width;
         bg.displayHeight = config.height;
 
@@ -20,7 +20,7 @@ class MainMenu extends Phaser.Scene
 
         const playButton = this.createButton(centerX, centerY, 'Play', () =>
         {
-            this.sound.get('menu').stop();
+            this.sound.get(musicMenuKey).stop();
 
             let user = getUser();
             let levelData = undefined;
@@ -65,14 +65,14 @@ class MainMenu extends Phaser.Scene
             loop: true,
             volume: 1,
         };
-        this.sound.add('menu', soundConfig);
+        this.sound.add(musicMenuKey, soundConfig);
     }
 
     update()
     {
-        if (!this.sound.get('menu').isPlaying)
+        if (!this.sound.get(musicMenuKey).isPlaying)
         {
-            this.sound.get('menu').play();
+            this.sound.get(musicMenuKey).play();
         }
     }
 
