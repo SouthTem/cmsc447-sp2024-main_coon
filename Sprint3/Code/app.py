@@ -111,7 +111,7 @@ def login_page():
 
             print(account)
             if account is not None:
-                token = create_access_token(identity=account.id)
+                token = create_access_token(identity=account.id, expires_delta=None)
 
                 print("token:", token)
                 # TODO: redirect to the game
@@ -145,7 +145,7 @@ def login():
 
         print(account)
         if account is not None:
-            token = create_access_token(identity=account.id)
+            token = create_access_token(identity=account.id, expires_delta=None)
             print("token:", token)
             
             return jsonify({'success':True, 'access_token': token})
@@ -170,7 +170,32 @@ def leaderboard():
             print(run)
             data.append([player_account.username, level.name, run.points, run.coins, run.create_time.strftime("%m/%d/%Y %I:%M %p")])
 
+    data.sort(key=lambda x: (x[0], x[1])) # sort by name and level
+
     return render_template('scoreboard.html', data=data)
+
+@app.route('/top5', methods=['GET'])
+def top5():
+    try:
+        players_points = []
+        player:database.Player = None
+        for player in database.Player.query.all():
+            player_account:database.UserAccount = database.UserAccount.query.get(ident=player.account_id)
+            total_points = 0
+            level:database.Level = None
+            for level in database.Level.query.all():
+                runs_per_level = list(filter(lambda x: x.level_id == level.id, player.runs))
+                if runs_per_level is not None and len(runs_per_level) > 0:
+                    total_points += max(runs_per_level, key=lambda x: x.points).points
+
+            players_points.append([player_account.username, total_points, player.coins])
+
+        players_points.sort(key=lambda x: x[1], reverse=True)
+
+        return render_template('top5.html', data=players_points)
+    except Exception as e:
+        print(e)
+        return render_template('top5.html', data=[])
 
 @app.route('/top_leaderboard', methods=['GET'])
 def top_leaderboard():

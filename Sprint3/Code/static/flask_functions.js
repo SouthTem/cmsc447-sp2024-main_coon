@@ -6,6 +6,7 @@ const USER_ENDPOINT = "/account";
 const POPULATE_ENDPOINT = "/populate";
 const OUTFIT_ENDPOINT = "/outfit";
 const TOP_ENDPOINT = "/top_leaderboard";
+const PERSONAL_ENDPOINT = "/personal_leaderboard";
 
 /**
  * Gets the auth token from storage
