@@ -7,7 +7,7 @@ const level1key = 'level1';
 const level2key = 'level2';
 const level3key = 'level3';
 
-const level1Name = 'Easy Level';
+const level1Name = 'Wild West';
 const level2Name = 'Lost In Space';
 const level3Name = 'Castle Panic';
 
