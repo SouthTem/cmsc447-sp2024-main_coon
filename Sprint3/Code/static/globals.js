@@ -8,8 +8,8 @@ const level2key = 'level2';
 const level3key = 'level3';
 
 const level1Name = 'Easy Level';
-const level2Name = 'Medium Level';
-const level3Name = 'Hard Level';
+const level2Name = 'Lost In Space';
+const level3Name = 'Castle Panic';
 
 const woodenKey = 'wooden';
 const castleKey = 'castle';

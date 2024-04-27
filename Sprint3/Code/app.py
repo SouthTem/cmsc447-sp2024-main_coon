@@ -111,7 +111,7 @@ def login_page():
 
             print(account)
             if account is not None:
-                token = create_access_token(identity=account.id, expires_delta=None)
+                token = create_access_token(identity=account.id, expires_delta=False)
 
                 print("token:", token)
                 # TODO: redirect to the game
@@ -145,7 +145,7 @@ def login():
 
         print(account)
         if account is not None:
-            token = create_access_token(identity=account.id, expires_delta=None)
+            token = create_access_token(identity=account.id, expires_delta=False)
             print("token:", token)
             
             return jsonify({'success':True, 'access_token': token})
