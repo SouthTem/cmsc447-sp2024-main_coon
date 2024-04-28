@@ -72,14 +72,14 @@ class Preloader extends Phaser.Scene
         this.load.spritesheet('dog', 'Dog.png', { frameWidth: 24, frameHeight: 18 });
         //this.load.image('star', 'star.png');
         //this.load.spritesheet('dude', 'dude.png', { frameWidth: 32, frameHeight: 48 });
-        this.load.image(level1key, 'level1.png');
-        this.load.image(level2key, 'level2.png');
-        this.load.image(level3key, 'level3.png');
         this.load.image('spike', 'Spikes.png');
 
-        this.load.image(level1Data.image, `${level1Data.image}.png`);
-        this.load.image(level2Data.image, `${level2Data.image}.png`);
-        this.load.image(level3Data.image, `${level3Data.image}.png`);
+        for (let i = 0; i < levelsArray.length; ++i)
+        {
+            let curr = levelsArray[i];
+            this.load.image(curr.key, `${curr.key}.png`);
+            this.load.image(curr.image, `${curr.image}.png`);
+        }
 
         this.load.image(backgroundCastle, 'bg_castle.png');
         this.load.image(backgroundSpace, 'bg_space.png');

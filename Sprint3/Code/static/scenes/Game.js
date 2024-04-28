@@ -104,7 +104,7 @@ class Game extends Phaser.Scene
     {
         console.log(data);
         this.levelData = data;
-        this.level = new Level(data.name, data.key, data.sprite, data.music, data.bg, this);
+        this.level = new Level(data.name, data.key, data.sprite, data.speed, data.music, data.bg, this);
     }
 
     create()
@@ -135,7 +135,7 @@ class Game extends Phaser.Scene
         player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
         fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
         fakePlayer.visible = false;
-        fakePlayer.setVelocityX(scrollSpeed);
+        fakePlayer.setVelocityX(this.level.speed);
 
         this.anims.create({
             key: 'walk',
@@ -295,18 +295,18 @@ class Game extends Phaser.Scene
         }
         else
         {
-            player.setVelocityX(scrollSpeed);
+            player.setVelocityX(this.level.speed);
         }
 
         if (Phaser.Input.Keyboard.JustDown(gravityKey))
         {
-            if (isFlipped && player.body.touching.up)
+            if (isFlipped && player.body.blocked.up)
             {
                 this.physics.world.gravity.y = gravity;
                 player.setFlipY(false);
                 isFlipped = false;
             } 
-            if (!isFlipped && player.body.touching.down)
+            if (!isFlipped && player.body.blocked.down)
             {
                 this.physics.world.gravity.y = -gravity;
                 player.setFlipY(true);

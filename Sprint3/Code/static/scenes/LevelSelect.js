@@ -2,6 +2,7 @@ const level1Data = {
     name: level1Name,
     key: level1key,
     sprite: woodenKey,
+    speed: scrollSpeed,
     music: null,
     difficulty: 1,
     bg: backgroundTown,
@@ -12,6 +13,7 @@ const level2Data = {
     name: level2Name,
     key: level2key,
     sprite: spaceKey,
+    speed: scrollSpeed,
     music: musicSpaceKey,
     difficulty: 2,
     bg: backgroundSpace,
@@ -22,13 +24,25 @@ const level3Data = {
     name: level3Name,
     key: level3key,
     sprite: castleKey,
+    speed: scrollSpeed,
     music: musicCastleKey,
     difficulty: 3,
     bg: backgroundCastle,
     image: 'level3_preview', 
 }
 
-const levelsArray = [level1Data, level2Data, level3Data];
+const bonusLevelData = {
+    name: "Speed Run",
+    key: "bonus_level",
+    sprite: castleKey,
+    speed: scrollSpeed * 2,
+    music: musicCastleKey,
+    difficulty: 5,
+    bg: backgroundSunset,
+    image: 'level3_preview', 
+}
+
+const levelsArray = [level1Data, level2Data, level3Data, bonusLevelData];
 
 class LevelSelect extends Phaser.Scene
 {
