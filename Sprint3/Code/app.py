@@ -247,6 +247,7 @@ def add_run():
         points = data.get('points', 0)
         coins = data.get('coins', 0)
         level_name = data.get('level_name', None)
+        new_level = data.get('new_level', False)
 
         current_account_id = get_jwt_identity()
         print('current id:', current_account_id)
@@ -263,7 +264,10 @@ def add_run():
         
         new_run:database.Run = database.Run(points=points, coins=coins, level_id=found_level.id)
         player.runs.append(new_run)
-        player.last_level = found_level
+
+        if new_level:
+            player.last_level = found_level
+            
         print(player.runs)
         database.db.session.commit()
         return jsonify({'success': True}), 200

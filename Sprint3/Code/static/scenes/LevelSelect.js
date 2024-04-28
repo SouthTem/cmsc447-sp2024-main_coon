@@ -106,8 +106,31 @@ class LevelSelect extends Phaser.Scene
         });
 
         playButton.on("pointerup", () => {
-            this.sound.stopAll();
-            this.scene.start('Game', levelsArray[this.index]);
+            let user = getUser();
+            user.then(json =>
+            {
+                let success = json.success;
+                let lastLevel = json.lastLevel;
+                if (success)
+                {
+                    let lastIndex = levelsArray.findIndex(x => x.name == lastLevel);
+                    let isUnlocked = this.index <= lastIndex + 1;
+                    if (isUnlocked)
+                    {
+                        this.sound.stopAll();
+                        this.scene.start('Game', levelsArray[this.index]);
+                    }
+                    else
+                    {
+                        alert("level is not unlocked yet");
+                    }
+                }
+                else
+                {
+                    alert('you are not logged in. Redirecting to login page!');
+                    window.location.href = "/login_page";
+                }
+            });
         });
 
         

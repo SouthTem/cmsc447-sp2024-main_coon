@@ -30,12 +30,19 @@ class MainMenu extends Phaser.Scene
                 let lastLevel = json.lastLevel;
                 if (success)
                 {
-                    levelData = levelsArray.find(x => x.name == lastLevel)
-
-                    if (levelData != undefined)
-                        this.scene.start('Game', levelData);
+                    let index = levelsArray.findIndex(x => x.name == lastLevel);
+                    if (index + 1 >= levelsArray.length)
+                    {
+                        this.scene.start('Game', levelsArray[levelsArray.length - 1]);
+                    }
+                    else if (index >= 0)
+                    {
+                        this.scene.start('Game', levelsArray[index + 1]);
+                    }
                     else
-                        this.scene.start('Game', level1Data);
+                    {
+                        this.scene.start('Game', levelsArray[0]);
+                    }
                 }
                 else
                 {

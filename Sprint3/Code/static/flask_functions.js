@@ -122,14 +122,16 @@ function login(username, password)
  * @param {integer} points number of points earned in the run
  * @param {integer} coins number of coins obtained in the run
  * @param {string} levelName name of the level just ran
+ * @param {boolean} newLevel whether or not this a new level
  */
-function addRun(points, coins, levelName)
+function addRun(points, coins, levelName, newLevel = false)
 {
     var data = JSON.stringify
     ({
         points: points,
         coins: coins,
-        level_name: levelName 
+        level_name: levelName,
+        new_level: newLevel
     });
 
     token = get_token();

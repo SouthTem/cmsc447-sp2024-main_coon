@@ -43,7 +43,24 @@ class LevelComplete extends Phaser.Scene
             align: 'center'
         }).setOrigin(0.5);
 
-        addRun(this.score, this.coins, this.name);
+        let user = getUser();
+        user.then(json =>
+        {
+            let success = json.success;
+            let lastLevel = json.lastLevel;
+            if (success)
+            {
+                let lastIndex = levelsArray.findIndex(x => x.name == lastLevel);
+                let currIndex = levelsArray.findIndex(x => x.name == this.name);
+                let newLevel = currIndex >= lastIndex ? true : false;
+                addRun(this.score, this.coins, this.name, newLevel);
+            }
+            else
+            {
+                alert('you are not logged in. Redirecting to login page!');
+                window.location.href = "/login_page";
+            }
+        });
 
         const retry = this.add.text(314 - 50, centerY + 200, 'Retry', {
             fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
@@ -78,7 +95,6 @@ class LevelComplete extends Phaser.Scene
         });
 
         mainMenu.on("pointerup", () => {
-            this.scene.restart('MainMenu');
             this.scene.start('MainMenu');
         });
 
