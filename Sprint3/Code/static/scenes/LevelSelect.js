@@ -39,7 +39,7 @@ const bonusLevelData = {
     music: musicCastleKey,
     difficulty: 5,
     bg: backgroundSunset,
-    image: 'level3_preview', 
+    image: 'bonus_level_preview', 
 }
 
 const levelsArray = [level1Data, level2Data, level3Data, bonusLevelData];
