@@ -105,6 +105,11 @@ class Game extends Phaser.Scene
         console.log(data);
         this.levelData = data;
         this.level = new Level(data.name, data.key, data.sprite, data.speed, data.music, data.bg, this);
+        this.skin = skinArray.find(x => x.equipped) ?? skin1;
+        this.cape = capesArray.find(x => x.equipped);
+        this.hat = hatsArray.find(x => x.equipped);
+
+        console.log(this.skin, this.cape, this.hat);
     }
 
     create()
@@ -132,14 +137,15 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
-        player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
-        fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, 'dog').setScale(2);
+        player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, this.skin.sprite).setScale(2);
+        fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, this.skin.sprite).setScale(2);
         fakePlayer.visible = false;
         fakePlayer.setVelocityX(this.level.speed);
 
+        this.anims.remove('walk');
         this.anims.create({
             key: 'walk',
-            frames: this.anims.generateFrameNumbers('dog', { start: 0, end: 1 }),
+            frames: this.anims.generateFrameNumbers(this.skin.sprite, { start: 0, end: 1 }),
             frameRate: 5,
             repeat: -1
         });

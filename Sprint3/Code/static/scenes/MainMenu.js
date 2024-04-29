@@ -16,14 +16,17 @@ class MainMenu extends Phaser.Scene
         bg.displayWidth = config.width;
         bg.displayHeight = config.height;
 
+        // updates the game with the outfit information from the database
+        // this could probably be merged with getUser, but this works so whatever
+        this.getCoinsFromDatabase();
+
         this.add.image(centerX, centerY - 100, 'logo');
 
         const playButton = this.createButton(centerX, centerY, 'Play', () =>
         {
-            this.sound.get(musicMenuKey).stop();
+            this.sound.stopAll();
 
             let user = getUser();
-            let levelData = undefined;
             user.then(json =>
             {
                 let success = json.success;

@@ -1,6 +1,6 @@
 const skin1 = {
     name: "Skin 1",
-    sprite: "dog",
+    sprite: "Dog",
     cost: 100,
     obtained: true,
     equipped: false,
@@ -8,7 +8,7 @@ const skin1 = {
 
 const skin2 = {
     name: "Skin 2",
-    sprite: "dog",
+    sprite: "Dog_White",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -16,7 +16,7 @@ const skin2 = {
 
 const skin3 = {
     name: "Skin 3",
-    sprite: "dog",
+    sprite: "Dog_Gold",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -26,7 +26,7 @@ const skinArray = [skin1, skin2, skin3];
 
 const cape1 = {
     name: "Cape 1",
-    sprite: "dog",
+    sprite: "Dog",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -34,7 +34,7 @@ const cape1 = {
 
 const cape2 = {
     name: "Cape 2",
-    sprite: "dog",
+    sprite: "Dog",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -42,7 +42,7 @@ const cape2 = {
 
 const cape3 = {
     name: "Cape 3",
-    sprite: "dog",
+    sprite: "Dog",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -52,7 +52,7 @@ const capesArray = [cape1, cape2, cape3];
 
 const hat1 = {
     name: "Hat 1",
-    sprite: "dog",
+    sprite: "Dog",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -60,7 +60,7 @@ const hat1 = {
 
 const hat2 = {
     name: "Hat 2",
-    sprite: "dog",
+    sprite: "Dog",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -68,7 +68,7 @@ const hat2 = {
 
 const hat3 = {
     name: "Hat 3",
-    sprite: "dog",
+    sprite: "Dog",
     cost: 100,
     obtained: false,
     equipped: false,

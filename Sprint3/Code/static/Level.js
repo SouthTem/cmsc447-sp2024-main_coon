@@ -32,6 +32,10 @@ class Level
 
     readLevelImage()
     {
+        // this line prevents a crash when spamming the play button immediately on load.
+        // there has got to be a better solution, but this works for now.
+        this.scene.textures.removeKey(key);
+
         const canvas = this.scene.textures.createCanvas(key, this.src.width, this.src.height).draw(0,0,this.src);
 
         let count = 0;

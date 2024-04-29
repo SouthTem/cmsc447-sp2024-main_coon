@@ -69,7 +69,7 @@ class Preloader extends Phaser.Scene
         this.load.image('background', 'bg.png');
         this.load.image('logo', 'logo.png');
         //this.load.image('ground', 'platform.png');
-        this.load.spritesheet('dog', 'Dog.png', { frameWidth: 24, frameHeight: 18 });
+        //this.load.spritesheet('dog', 'Dog.png', { frameWidth: 24, frameHeight: 18 });
         //this.load.image('star', 'star.png');
         //this.load.spritesheet('dude', 'dude.png', { frameWidth: 32, frameHeight: 48 });
         this.load.image('spike', 'Spikes.png');
@@ -89,7 +89,7 @@ class Preloader extends Phaser.Scene
         for (let i = 0; i < skinArray.length; ++i)
         {
             let curr = skinArray[i];
-            this.load.image(curr.sprite, `${curr.sprite}.png`);
+            this.load.spritesheet(curr.sprite, `${curr.sprite}.png`, { frameWidth: 24, frameHeight: 18 });
         }
 
         for (let i = 0; i < capesArray.length; ++i)
