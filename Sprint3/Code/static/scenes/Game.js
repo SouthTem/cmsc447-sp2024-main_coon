@@ -139,7 +139,16 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
-        console.log(this.hat);
+        const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
+        homeRect.setScrollFactor(0);
+
+        homeRect.setInteractive();
+        homeRect.on("pointerup", () => {
+            // no coins will be added if clicking on the main menu button
+            // im okay with this since it can prevent cheating.
+            this.scene.start("MainMenu");
+        });
+
         player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, this.skin.sprite).setScale(2);
         hat_sprite = this.hat ? this.add.sprite(player.x, player.y, this.hat.sprite).setScale(2) : undefined;
         cape_sprite = this.cape ? this.add.sprite(player.x, player.y, this.cape.sprite).setScale(2) : undefined;
