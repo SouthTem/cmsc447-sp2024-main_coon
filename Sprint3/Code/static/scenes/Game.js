@@ -3,6 +3,7 @@
 var player;
 var fakePlayer;
 var hat_sprite;
+var cape_sprite;
 
 var coins;
 var spikes;
@@ -138,8 +139,10 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
+        console.log(this.hat);
         player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, this.skin.sprite).setScale(2);
         hat_sprite = this.hat ? this.add.sprite(player.x, player.y, this.hat.sprite).setScale(2) : undefined;
+        cape_sprite = this.cape ? this.add.sprite(player.x, player.y, this.cape.sprite).setScale(2) : undefined;
         fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, this.skin.sprite).setScale(2);
         fakePlayer.visible = false;
         fakePlayer.setVelocityX(this.level.speed);
@@ -164,6 +167,18 @@ class Game extends Phaser.Scene
                 repeat: -1
             });
             hat_sprite.anims.play('anim_hat', true);
+        }
+
+        if (this.cape)
+        {
+            this.anims.remove('anim_cape');
+            this.anims.create({
+                key: 'anim_cape',
+                frames: this.anims.generateFrameNumbers(this.cape.sprite, { start: 0, end: 1 }),
+                frameRate: 5,
+                repeat: -1
+            });
+            cape_sprite.anims.play('anim_cape', true);
         }
         
 
@@ -317,6 +332,7 @@ class Game extends Phaser.Scene
                 this.physics.world.gravity.y = gravity;
                 player.setFlipY(false);
                 hat_sprite?.setFlipY(false);
+                cape_sprite?.setFlipY(false);
                 isFlipped = false;
             } 
             if (!isFlipped && player.body.blocked.down)
@@ -324,6 +340,7 @@ class Game extends Phaser.Scene
                 this.physics.world.gravity.y = -gravity;
                 player.setFlipY(true);
                 hat_sprite?.setFlipY(true);
+                cape_sprite?.setFlipY(true);
                 isFlipped = true;
             }
         }
@@ -393,6 +410,12 @@ class Game extends Phaser.Scene
         {
             hat_sprite.x = player.body.center.x;
             hat_sprite.y = player.body.center.y;
+        }
+
+        if (this.cape)
+        {
+            cape_sprite.x = player.body.center.x;
+            cape_sprite.y = player.body.center.y;
         }
     }
 }

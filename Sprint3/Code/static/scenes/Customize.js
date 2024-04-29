@@ -26,7 +26,7 @@ const skinArray = [skin1, skin2, skin3];
 
 const cape1 = {
     name: "Cape 1",
-    sprite: "Dog",
+    sprite: "Cape_Blue",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -34,7 +34,7 @@ const cape1 = {
 
 const cape2 = {
     name: "Cape 2",
-    sprite: "Dog",
+    sprite: "Cape_Red",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -42,7 +42,7 @@ const cape2 = {
 
 const cape3 = {
     name: "Cape 3",
-    sprite: "Dog",
+    sprite: "Cape_Pink",
     cost: 100,
     obtained: false,
     equipped: false,

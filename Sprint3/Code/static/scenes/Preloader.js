@@ -95,7 +95,7 @@ class Preloader extends Phaser.Scene
         for (let i = 0; i < capesArray.length; ++i)
         {
             let curr = capesArray[i];
-            this.load.image(curr.sprite, `${curr.sprite}.png`);
+            this.load.spritesheet(curr.sprite, `${curr.sprite}.png`, { frameWidth: 24, frameHeight: 18 });
         }
 
         for (let i = 0; i < hatsArray.length; ++i)
