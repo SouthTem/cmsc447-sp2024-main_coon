@@ -52,7 +52,7 @@ const capesArray = [cape1, cape2, cape3];
 
 const hat1 = {
     name: "Hat 1",
-    sprite: "Dog",
+    sprite: "Hat_Halo",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -60,7 +60,7 @@ const hat1 = {
 
 const hat2 = {
     name: "Hat 2",
-    sprite: "Dog",
+    sprite: "Hat_Cap",
     cost: 100,
     obtained: false,
     equipped: false,
@@ -68,7 +68,7 @@ const hat2 = {
 
 const hat3 = {
     name: "Hat 3",
-    sprite: "Dog",
+    sprite: "Hat_Top",
     cost: 100,
     obtained: false,
     equipped: false,

@@ -2,6 +2,7 @@
 
 var player;
 var fakePlayer;
+var hat_sprite;
 
 var coins;
 var spikes;
@@ -138,6 +139,7 @@ class Game extends Phaser.Scene
         });
 
         player = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, this.skin.sprite).setScale(2);
+        hat_sprite = this.hat ? this.add.sprite(player.x, player.y, this.hat.sprite).setScale(2) : undefined;
         fakePlayer = this.physics.add.sprite(spawnTileX * gridSize, spawnTileY * gridSize, this.skin.sprite).setScale(2);
         fakePlayer.visible = false;
         fakePlayer.setVelocityX(this.level.speed);
@@ -151,6 +153,19 @@ class Game extends Phaser.Scene
         });
 
         player.anims.play('walk', true);
+
+        if (this.hat)
+        {
+            this.anims.remove('anim_hat');
+            this.anims.create({
+                key: 'anim_hat',
+                frames: this.anims.generateFrameNumbers(this.hat.sprite, { start: 0, end: 1 }),
+                frameRate: 5,
+                repeat: -1
+            });
+            hat_sprite.anims.play('anim_hat', true);
+        }
+        
 
         //player.setBounce(0.2);
         //player.setCollideWorldBounds(true);
@@ -291,18 +306,9 @@ class Game extends Phaser.Scene
             console.log('object count = ', ceilings.children.entries.length);
         }
 
-        if (cursors.left.isDown)
-        {
-            player.setVelocityX(-160);
-        }
-        else if (cursors.right.isDown)
-        {
-            player.setVelocityX(160);
-        }
-        else
-        {
-            player.setVelocityX(this.level.speed);
-        }
+        player.setVelocityX(this.level.speed);
+        
+        //hat_sprite.setVelocityX(this.level.speed);
 
         if (Phaser.Input.Keyboard.JustDown(gravityKey))
         {
@@ -310,12 +316,14 @@ class Game extends Phaser.Scene
             {
                 this.physics.world.gravity.y = gravity;
                 player.setFlipY(false);
+                hat_sprite?.setFlipY(false);
                 isFlipped = false;
             } 
             if (!isFlipped && player.body.blocked.down)
             {
                 this.physics.world.gravity.y = -gravity;
                 player.setFlipY(true);
+                hat_sprite?.setFlipY(true);
                 isFlipped = true;
             }
         }
@@ -379,6 +387,12 @@ class Game extends Phaser.Scene
         if (this.level.music != null && !this.sound.get(this.level.music).isPlaying)
         {
             this.sound.get(this.level.music).play();
+        }
+
+        if (this.hat)
+        {
+            hat_sprite.x = player.body.center.x;
+            hat_sprite.y = player.body.center.y;
         }
     }
 }

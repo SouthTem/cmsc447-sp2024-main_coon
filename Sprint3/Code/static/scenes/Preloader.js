@@ -101,7 +101,7 @@ class Preloader extends Phaser.Scene
         for (let i = 0; i < hatsArray.length; ++i)
         {
             let curr = hatsArray[i];
-            this.load.image(curr.sprite, `${curr.sprite}.png`);
+            this.load.spritesheet(curr.sprite, `${curr.sprite}.png`, { frameWidth: 24, frameHeight: 20 });
         }
 
         this.load.setPath('static/Music');
