@@ -82,14 +82,7 @@ class MainMenu extends Phaser.Scene
             volume: 1,
         };
         this.sound.add(musicMenuKey, soundConfig);
-    }
-
-    update()
-    {
-        if (!this.sound.get(musicMenuKey).isPlaying)
-        {
-            this.sound.get(musicMenuKey).play();
-        }
+        this.sound.get(musicMenuKey).play();
     }
 
     createButton(x, y, text, clickAction)

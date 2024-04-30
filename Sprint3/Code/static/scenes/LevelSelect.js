@@ -134,22 +134,42 @@ class LevelSelect extends Phaser.Scene
         });
 
         
-        const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
+        //const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
+        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2);
 
-        homeRect.setInteractive();
-        homeRect.on("pointerup", () => {
+        homeButton.setInteractive();
+        homeButton.on('pointerover', () => {
+            homeButton.setTint("0xffff00");
+        });
+        homeButton.on('pointerout', () => {
+            homeButton.setTint("0xffffff");
+        });
+        homeButton.on("pointerup", () => {
             this.scene.start("MainMenu");
         });
 
-        const leftRect = this.add.rectangle(0 + 50, centerY, 50, 50, '#ffffff');
-        leftRect.setInteractive();
-        leftRect.on("pointerup", () => {
+        const leftArrow = this.add.sprite(0 + 50, centerY, 'menu_arrow').setScale(3).setFlipX(true);
+        leftArrow.setInteractive();
+        leftArrow.on('pointerover', () => {
+            leftArrow.setTint("0xffff00");
+        });
+        leftArrow.on('pointerout', () => {
+            leftArrow.setTint("0xffffff");
+        });
+        leftArrow.on("pointerup", () => {
             this.updateIndex(this.index - 1);
         });
 
-        const rightRect = this.add.rectangle(config.width - 50, centerY, 50, 50, '#ffffff');
-        rightRect.setInteractive();
-        rightRect.on("pointerup", () => {
+        //const rightRect = this.add.rectangle(config.width - 50, centerY, 50, 50, '#ffffff');
+        const rightArrow = this.add.sprite(config.width - 50, centerY, 'menu_arrow').setScale(3);
+        rightArrow.setInteractive();
+        rightArrow.on('pointerover', () => {
+            rightArrow.setTint("0x0ffff00");
+        });
+        rightArrow.on('pointerout', () => {
+            rightArrow.setTint("0xffffff");
+        });
+        rightArrow.on("pointerup", () => {
             this.updateIndex(this.index + 1);
         });
 

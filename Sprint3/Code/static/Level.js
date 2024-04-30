@@ -70,9 +70,6 @@ class Level
     {
         this.scene.textures.remove(key);
         
-        if (this.music != null)
-        {
-            this.scene.sound.get(this.music).stop();    
-        }
+        this?.scene?.music?.stopAll();   
     }
 }

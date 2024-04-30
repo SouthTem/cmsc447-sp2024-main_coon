@@ -139,11 +139,18 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
-        const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
-        homeRect.setScrollFactor(0);
+        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2);
+        homeButton.setScrollFactor(0);
 
-        homeRect.setInteractive();
-        homeRect.on("pointerup", () => {
+        homeButton.setInteractive();
+        homeButton.on('pointerover', () => {
+            homeButton.setTint("0xffff00");
+        });
+        homeButton.on('pointerout', () => {
+            homeButton.setTint("0xffffff");
+        });
+        homeButton.on("pointerup", () => {
+            this.sound.stopAll();
             // no coins will be added if clicking on the main menu button
             // im okay with this since it can prevent cheating.
             this.scene.start("MainMenu");

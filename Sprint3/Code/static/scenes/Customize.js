@@ -101,12 +101,21 @@ class Customize extends Phaser.Scene
         this.add.image(20, 20, 'coin').setOrigin(0, 0).setScale(2);
         this.coinText = this.createCost(20 + 40, 20, "").setOrigin(0, 0);
 
-        const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
+        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2);
+        homeButton.setScrollFactor(0);
 
-        homeRect.setInteractive();
-        homeRect.on("pointerup", () =>
+        homeButton.setInteractive();
+        homeButton.on('pointerover', () => {
+            homeButton.setTint("0xffff00");
+        });
+        homeButton.on('pointerout', () => {
+            homeButton.setTint("0xffffff");
+        });
+
+        homeButton.setInteractive();
+        homeButton.on("pointerup", () =>
         {
-            this.scene.start("MainMenu");
+            this?.scene?.start("MainMenu");
         });
 
         let fontSize = 24;
