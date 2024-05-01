@@ -139,7 +139,7 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
-        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2);
+        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2).setDepth(textDepth);
         homeButton.setScrollFactor(0);
 
         homeButton.setInteractive();
@@ -219,6 +219,11 @@ class Game extends Phaser.Scene
         gravityKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         //this.level = new Level(level3Name, level3key, castleKey, this);
         this.level.readLevelImage();
+
+        if (levelsArray.findIndex(x => x.name == this.level.name) == 0)
+        {
+            this.addTutorialTextForLevel1();
+        }
 
         this.cameras.main.setBounds(0, 0, (this.level.src.width) * gridSize, mainHeight);
         this.physics.world.setBounds(0, 0, (this.level.src.width) * gridSize, mainHeight);
@@ -433,5 +438,29 @@ class Game extends Phaser.Scene
             cape_sprite.x = player.body.center.x;
             cape_sprite.y = player.body.center.y;
         }
+    }
+
+    addTutorialTextForLevel1()
+    {
+        const spaceText = this.add.text(player.x, player.y + 100, 'Press Space to Change Gravity', {
+            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+        }).setOrigin(0,0);
+        spaceText.setDepth(textDepth);
+        spaceText.setScrollFactor(1);
+
+        const coinText = this.add.text(player.x + 1000, player.y, 'Collect Coins for Points', {
+            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+        }).setOrigin(0,0);
+        coinText.setDepth(textDepth);
+        coinText.setScrollFactor(1);
+
+        const spikeText = this.add.text(player.x + 1700, player.y - 100, 'Avoid the Spikes', {
+            fontFamily: 'Arial Black', fontSize: 38, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+        }).setOrigin(0,0);
+        spikeText.setDepth(textDepth);
+        spikeText.setScrollFactor(1);
     }
 }

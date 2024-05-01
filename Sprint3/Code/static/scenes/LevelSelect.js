@@ -3,7 +3,7 @@ const level1Data = {
     key: level1key,
     sprite: woodenKey,
     speed: scrollSpeed,
-    music: null,
+    music: musicMenuKey,
     difficulty: 1,
     bg: backgroundTown,
     image: 'level1_preview', 

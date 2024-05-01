@@ -136,7 +136,7 @@ class Customize extends Phaser.Scene
             this.skinButtons.push(this.createButtonFunctional(button, skinArray));
         }
 
-        const capesText = this.add.text(100, 275, "Capes", {
+        const capesText = this.add.text(100, 275, "Clothes", {
             fontFamily: 'Arial Black', fontSize: fontSize, color: '#ffffff',
             stroke: '#000000', strokeThickness: 8,
             align: 'center'
@@ -161,6 +161,21 @@ class Customize extends Phaser.Scene
             let button = new Button(this, startX + i * gapX, hatsText.y + yPadding, curr)
             this.skinButtons.push(this.createButtonFunctional(button, hatsArray));
         }
+
+        
+
+        const previewX = 650;
+        const previewY = config.height / 2;
+        let color = "0xbbbbbb";
+        const previewText = this.add.text(previewX, previewY - 100, "Preview", {
+            fontFamily: 'Arial Black', fontSize: fontSize, color: '#ffffff',
+            stroke: '#000000', strokeThickness: 8,
+            align: 'center'
+        }).setOrigin(0.5);
+        const rect = this.add.rectangle(previewX, previewY, 24 * 7, 24 * 7, color);
+        this.player = this.add.sprite(previewX, previewY, skin1.sprite).setScale(4);
+        this.hat_sprite = this.add.sprite(previewX, previewY, hat1.sprite).setScale(4);
+        this.cape_sprite = this.add.sprite(previewX, previewY, cape2.sprite).setScale(4);
     }
 
     createCost(x, y, cost)
@@ -210,6 +225,34 @@ class Customize extends Phaser.Scene
         {
             let curr = this.skinButtons[i];
             curr.update();
+        }
+
+        let currentSkin = skinArray.find(x => x.equipped);
+        if (currentSkin)
+        {
+            this.player.setTexture(currentSkin.sprite);
+        }
+
+        let currentCape = capesArray.find(x => x.equipped);
+        if (currentCape)
+        {
+            this.cape_sprite.visible = true;
+            this.cape_sprite.setTexture(currentCape.sprite);
+        }
+        else
+        {
+            this.cape_sprite.visible = false;
+        }
+
+        let currentHat = hatsArray.find(x => x.equipped);
+        if (currentHat)
+        {
+            this.hat_sprite.setTexture(currentHat.sprite);
+            this.hat_sprite.visible = true;
+        }
+        else
+        {
+            this.hat_sprite.visible = false;
         }
     }
 }
