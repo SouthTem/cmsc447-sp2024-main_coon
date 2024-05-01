@@ -18,6 +18,7 @@ const spaceKey = 'space';
 const musicSpaceKey = 'music_space';
 const musicCastleKey = 'music_castle';
 const musicMenuKey = 'music_menu';
+const musicWestKey = 'music_west';
 
 const backgroundCastle = 'bg_castle';
 const backgroundSpace = 'bg_space';

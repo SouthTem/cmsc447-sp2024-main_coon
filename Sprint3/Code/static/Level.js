@@ -17,8 +17,9 @@ class Level
     sprite;
     bg;
     music;
+    volume;
 
-    constructor(name, image, sprite, speed, music = null, bg, scene)
+    constructor(name, image, sprite, speed, music = null, volume, bg, scene)
     {
         this.name = name;
         this.image = image;
@@ -28,6 +29,7 @@ class Level
         this.music = music;
         this.bg = bg;
         this.speed = speed;
+        this.volume = volume;
     }
 
     readLevelImage()

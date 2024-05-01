@@ -106,7 +106,7 @@ class Game extends Phaser.Scene
     {
         console.log(data);
         this.levelData = data;
-        this.level = new Level(data.name, data.key, data.sprite, data.speed, data.music, data.bg, this);
+        this.level = new Level(data.name, data.key, data.sprite, data.speed, data.music, data.volume, data.bg, this);
         this.skin = skinArray.find(x => x.equipped) ?? skin1;
         this.cape = capesArray.find(x => x.equipped);
         this.hat = hatsArray.find(x => x.equipped);
@@ -247,7 +247,7 @@ class Game extends Phaser.Scene
 
         let soundConfig = {
             loop: true,
-            volume: 1,
+            volume: this.level.volume,
         };
         if (this.level.music != null)
         {

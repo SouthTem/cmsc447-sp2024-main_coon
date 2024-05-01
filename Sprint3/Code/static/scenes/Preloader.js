@@ -112,6 +112,7 @@ class Preloader extends Phaser.Scene
         this.load.audio(musicMenuKey, 'Menu.wav');
         this.load.audio(musicSpaceKey, 'Space.wav');
         this.load.audio(musicCastleKey, 'Castle.wav');
+        this.load.audio(musicWestKey, 'Pseudo_West.mp3');
     }
 
     create ()
