@@ -7,12 +7,10 @@ createForm.addEventListener("submit", (e) => {
     let password = document.getElementById("password");
   
     if (username.value == "" || password.value == "") {
-      console.log('empty values');
+
     } else {
         let x = create(username.value, password.value);
-        console.log(x);
         x.then(success => {
-          console.log(success);
           if (success)
           {
             alert('create success');
