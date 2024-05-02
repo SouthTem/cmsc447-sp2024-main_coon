@@ -59,17 +59,12 @@ class Preloader extends Phaser.Scene
     preload()
     {
         this.load.setPath('static/Sprites');
-        //this.load.image('sky', 'sky.png');
+
         this.load.image(woodenKey, 'Wooden.png');
         this.load.image(castleKey, 'Castle.png');
         this.load.image(spaceKey, 'Space.png');
         this.load.image('coin', 'Coin.png');
-        //this.load.image('background', 'bg_sky.png');
         this.load.image('logo', 'logo.png');
-        //this.load.image('ground', 'platform.png');
-        //this.load.spritesheet('dog', 'Dog.png', { frameWidth: 24, frameHeight: 18 });
-        //this.load.image('star', 'star.png');
-        //this.load.spritesheet('dude', 'dude.png', { frameWidth: 32, frameHeight: 48 });
         this.load.image('spike', 'Spikes.png');
 
         for (let i = 0; i < levelsArray.length; ++i)
