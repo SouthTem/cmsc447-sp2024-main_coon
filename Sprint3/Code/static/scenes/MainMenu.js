@@ -20,8 +20,9 @@ class MainMenu extends Phaser.Scene
         // this could probably be merged with getUser, but this works so whatever
         this.getCoinsFromDatabase()
 
+        const logo_rec = this.add.rectangle(0, 0, config.width, config.height, "0x000000", 0.25).setOrigin(0, 0);
         const logo_image = this.add.image(centerX - 10, centerY - 150, 'logo');
-        logo_image.scale = 0.55
+        logo_image.scale = 0.55;
 
         const playButton = this.createButton(centerX, centerY, 'Play', () =>
         {
