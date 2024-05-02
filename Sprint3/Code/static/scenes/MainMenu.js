@@ -18,10 +18,10 @@ class MainMenu extends Phaser.Scene
 
         // updates the game with the outfit information from the database
         // this could probably be merged with getUser, but this works so whatever
-        this.getCoinsFromDatabase();
+        this.getCoinsFromDatabase()
 
-        const logo_image = this.add.image(centerX - 25, centerY - 100, 'logo');
-        logo_image.scale = 0.75
+        const logo_image = this.add.image(centerX - 10, centerY - 150, 'logo');
+        logo_image.scale = 0.55
 
         const playButton = this.createButton(centerX, centerY, 'Play', () =>
         {
