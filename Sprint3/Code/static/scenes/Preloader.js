@@ -41,7 +41,7 @@ class Preloader extends Phaser.Scene
         let centerY = config.height / 2;
 
         //  We loaded this image in our Boot Scene, so we can display it here
-        this.add.image(centerX, centerY, 'sky');
+        this.add.image(centerX, centerY, 'background');
 
         //  A simple progress bar. This is the outline of the bar.
         this.add.rectangle(centerX, centerY, 468, 32).setStrokeStyle(1, 0xffffff);
@@ -66,7 +66,7 @@ class Preloader extends Phaser.Scene
         this.load.image(castleKey, 'Castle.png');
         this.load.image(spaceKey, 'Space.png');
         this.load.image('coin', 'Coin.png');
-        this.load.image('background', 'bg.png');
+        //this.load.image('background', 'bg_sky.png');
         this.load.image('logo', 'logo.png');
         //this.load.image('ground', 'platform.png');
         //this.load.spritesheet('dog', 'Dog.png', { frameWidth: 24, frameHeight: 18 });
@@ -86,8 +86,8 @@ class Preloader extends Phaser.Scene
         this.load.image(backgroundSunset, 'bg_sunset.png');
         this.load.image(backgroundTown, 'bg_town.png');
         
-        this.load.image('menu_arrow', 'arrow.png');
-        this.load.image('menu_house', 'house.png');
+        this.load.image('menu_arrow', 'menu_arrow.png');
+        this.load.image('menu_house', 'menu_house.png');
 
         for (let i = 0; i < skinArray.length; ++i)
         {

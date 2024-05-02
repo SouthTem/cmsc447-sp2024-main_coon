@@ -139,7 +139,7 @@ class LevelSelect extends Phaser.Scene
 
         
         //const homeRect = this.add.rectangle(config.width - 10, 0 + 10, 50, 50, '#ffffff').setOrigin(1, 0);
-        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2);
+        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(1);
 
         homeButton.setInteractive();
         homeButton.on('pointerover', () => {
@@ -152,7 +152,7 @@ class LevelSelect extends Phaser.Scene
             this.scene.start("MainMenu");
         });
 
-        const leftArrow = this.add.sprite(0 + 50, centerY, 'menu_arrow').setScale(3).setFlipX(true);
+        const leftArrow = this.add.sprite(0 + 50, centerY, 'menu_arrow').setScale(1).setFlipX(true);
         leftArrow.setInteractive();
         leftArrow.on('pointerover', () => {
             leftArrow.setTint("0xffff00");
@@ -165,7 +165,7 @@ class LevelSelect extends Phaser.Scene
         });
 
         //const rightRect = this.add.rectangle(config.width - 50, centerY, 50, 50, '#ffffff');
-        const rightArrow = this.add.sprite(config.width - 50, centerY, 'menu_arrow').setScale(3);
+        const rightArrow = this.add.sprite(config.width - 50, centerY, 'menu_arrow').setScale(1);
         rightArrow.setInteractive();
         rightArrow.on('pointerover', () => {
             rightArrow.setTint("0x0ffff00");

@@ -139,7 +139,7 @@ class Game extends Phaser.Scene
             immovable: true
         });
 
-        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2).setDepth(textDepth);
+        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(1).setDepth(textDepth);
         homeButton.setScrollFactor(0);
 
         homeButton.setInteractive();

@@ -101,7 +101,7 @@ class Customize extends Phaser.Scene
         this.add.image(20, 20, 'coin').setOrigin(0, 0).setScale(2);
         this.coinText = this.createCost(20 + 40, 20, "").setOrigin(0, 0);
 
-        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(2);
+        const homeButton = this.add.sprite(config.width - 10, 0 + 10, 'menu_house').setOrigin(1, 0).setScale(1);
         homeButton.setScrollFactor(0);
 
         homeButton.setInteractive();
