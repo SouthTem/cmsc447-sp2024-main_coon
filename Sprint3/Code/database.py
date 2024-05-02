@@ -132,5 +132,3 @@ def setup():
     db.session.add_all([account, player])
 
     db.session.commit()
-
-    print(player.outfits)

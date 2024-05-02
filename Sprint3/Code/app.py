@@ -40,8 +40,6 @@ def create():
             else:
                 username = request.form.get('username')
                 password = request.form.get('password')
-
-            print('create', username, password)
             
             if database.UserAccount.query.filter_by(username=username).count() > 0:
                 return jsonify({'success':False, 'message':'username was already taken'})
@@ -50,7 +48,6 @@ def create():
             
             player:database.Player = database.Player(user_account=account)
 
-            print(account)
             database.db.session.add_all([account, player])
 
             database.db.session.commit()
@@ -71,8 +68,6 @@ def create_page():
 
             username = request.form.get('username')
             password = request.form.get('password')
-
-            print(username, password)
             
             if database.UserAccount.query.filter_by(username=username).count() > 0:
                 return "username is already taken"
@@ -81,7 +76,6 @@ def create_page():
             
             player:database.Player = database.Player(user_account=account)
 
-            print(account)
             database.db.session.add_all([account, player])
 
             database.db.session.commit()
@@ -97,29 +91,9 @@ def create_page():
         print(e)
         return "Something went wrong"
 
-@app.route('/login_page', methods=['POST', 'GET'])
+@app.route('/login_page', methods=['GET'])
 def login_page():
-    try:
-        if request.method == "POST":
-
-            username = request.form.get('username')
-            password = request.form.get('password')
-
-            print(username, password)
-
-            account = database.UserAccount.get_account(username=username, password=password)
-
-            print(account)
-            if account is not None:
-                token = create_access_token(identity=account.id, expires_delta=False)
-
-                print("token:", token)
-                # TODO: redirect to the game
-                return "Login Successful"
-            else:
-                # no account is found, either the input is bad, or a new account needs to be created
-                return render_template('login.html')
-        
+    try:        
         if request.method == "GET":
             return render_template('login.html')
     except Exception as e:
@@ -139,14 +113,10 @@ def login():
             username = request.form.get('username')
             password = request.form.get('password')
 
-        print(username, password)
-
         account = database.UserAccount.get_account(username=username, password=password)
 
-        print(account)
         if account is not None:
             token = create_access_token(identity=account.id, expires_delta=False)
-            print("token:", token)
             
             return jsonify({'success':True, 'access_token': token})
     except Exception as e:
@@ -167,7 +137,6 @@ def leaderboard():
         level:database.Level = None
         for run in player.runs:
             level = database.Level.query.get(run.level_id)
-            print(run)
             data.append([player_account.username, level.name, run.points, run.coins, run.create_time.strftime("%m/%d/%Y %I:%M %p")])
 
     data.sort(key=lambda x: (x[0], x[1])) # sort by name and level
@@ -227,12 +196,10 @@ def top_leaderboard():
             data[f"{players_points[i][0]}"] = f"{players_points[i][1]}"
 
         json_data = json.dumps({"data": [data]})
-        print(json_data)
 
         uri = 'https://eope3o6d7z7e2cc.m.pipedream.net'
 
         res = requests.post(uri, data=json_data)
-        print(res)
 
         return jsonify({'success':True, 'data':json_data})
     except Exception as e:
@@ -250,10 +217,7 @@ def add_run():
         new_level = data.get('new_level', False)
 
         current_account_id = get_jwt_identity()
-        print('current id:', current_account_id)
         player:database.Player = database.Player.query.filter_by(id=current_account_id).one_or_none()
-
-        print(player)
 
         if player is None:
             raise ValueError('player not found')
@@ -268,7 +232,6 @@ def add_run():
         if new_level:
             player.last_level = found_level
             
-        print(player.runs)
         database.db.session.commit()
         return jsonify({'success': True}), 200
 
@@ -282,15 +245,12 @@ def get_user():
     try:
 
         current_account_id = get_jwt_identity()
-        print('current id:', current_account_id)
         account:database.UserAccount = database.UserAccount.query.get(current_account_id)
 
         if account is None:
             raise ValueError('account not found')
 
         player:database.Player = database.Player.query.filter_by(id=current_account_id).one_or_none()
-
-        print(player)
 
         if player is None:
             raise ValueError('player not found')
@@ -346,7 +306,6 @@ def update_coins():
 def update_outfit():
     try:
         data:dict = request.json
-        print(data)
 
         current_account_id = get_jwt_identity()
 
@@ -386,8 +345,6 @@ def populate_database():
 
             levels = request.json.get('levels', None)
             outfits = request.json.get('outfits', None)
-
-            print('populate',levels, outfits)
 
             if levels is not None and len(levels) > 0:
                 level_table = database.db.metadata.tables.get('level', None)
@@ -430,13 +387,9 @@ def populate_database():
 
 @app.route('/')
 def index():
-    # ac = database.UserAccount.get_account("test2", "pass")
-    # print(ac)
     if database_exists(f"sqlite:///instance/database.db"):
-        print("database exists")
         return render_template("index.html")
     database.setup()
-    print("yes")
     return render_template("index.html")
 
 if __name__ == "__main__":

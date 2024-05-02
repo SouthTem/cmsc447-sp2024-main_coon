@@ -218,7 +218,6 @@ class Customize extends Phaser.Scene
 
     update()
     {
-        //console.log(this.coins);
         this.coinText.setText(`${this.coins < 0 ? "" : this.coins}`);
 
         for (let i = 0; i < this.skinButtons.length; ++i)

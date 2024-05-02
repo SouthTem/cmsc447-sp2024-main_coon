@@ -104,14 +104,11 @@ class Game extends Phaser.Scene
 
     init(data)
     {
-        console.log(data);
         this.levelData = data;
         this.level = new Level(data.name, data.key, data.sprite, data.speed, data.music, data.volume, data.bg, this);
         this.skin = skinArray.find(x => x.equipped) ?? skin1;
         this.cape = capesArray.find(x => x.equipped);
         this.hat = hatsArray.find(x => x.equipped);
-
-        console.log(this.skin, this.cape, this.hat);
     }
 
     create()
@@ -337,11 +334,6 @@ class Game extends Phaser.Scene
         tick++;
         if (isGameOver) return;
 
-        if (tick % 60 == 0)
-        {
-            console.log('object count = ', ceilings.children.entries.length);
-        }
-
         player.setVelocityX(this.level.speed);
         
         //hat_sprite.setVelocityX(this.level.speed);
@@ -383,7 +375,6 @@ class Game extends Phaser.Scene
         if (player.x > this.physics.world.bounds.width)
         {
             this.level.unload();
-            console.log('completion', player.x / this.physics.world.bounds.width);
             addCoins(score / 20);
             this.scene.start('LevelComplete', {
                 score: score,

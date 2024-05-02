@@ -119,7 +119,6 @@ class MainMenu extends Phaser.Scene
         let user = getUser();
         return user.then(json =>
         {
-            console.log(json);
             let success = json.success;
             let name = json.name;
             let coins = json.coins;

@@ -47,7 +47,6 @@ function create(username, password)
         return response.json();
     })
     .then(json => {
-        console.log('create', json);
         let success = json.success;
         
         // if the response from the server is bad fail here
@@ -72,7 +71,6 @@ function create(username, password)
  */
 function login(username, password)
 {
-    console.log('login!!');
     var data = JSON.stringify
     ({
         username: username,
@@ -96,7 +94,6 @@ function login(username, password)
         return response.json();
     })
     .then(json => {
-        console.log('login', json);
         let success = json.success;
         
         // if the response from the server is bad fail here
@@ -163,7 +160,6 @@ function addRun(points, coins, levelName, newLevel = false)
         return response.json();
     })
     .then(json => {
-        console.log('addRun', json);
         let success = json.success;
 
         // if the response from the server is bad fail here
@@ -248,7 +244,6 @@ function getUser()
  */
 function addCoins(coinCount)
 {
-    console.log(coinCount);
     var data = JSON.stringify
     ({
         coins: coinCount,
@@ -300,7 +295,6 @@ function addCoins(coinCount)
 function changeOutfit(outfits)
 {
     var data = JSON.stringify(outfits);
-    console.log(data);
 
     const token = get_token()
 
