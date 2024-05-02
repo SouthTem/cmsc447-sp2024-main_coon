@@ -125,62 +125,12 @@ def setup():
     db.drop_all()
     db.create_all()
 
-    out1 = Outfit(name="cool outfit", cost=120, texture='test.png')
-    out2 = Outfit(name="cooler outfit", cost=140, texture='test2.png')
-    out3 = Outfit(name="coolest outfit", cost=200, texture='test3.png')
-
-    lev1 = Level(name="Easy Level", texture="level1", difficulty=0)
-    lev2 = Level(name="Medium Level", texture="level2", difficulty=1)
-    lev3 = Level(name="Hard Level", texture="level3", difficulty=2)
-
-    db.session.add_all([lev1, lev2, lev3])
-
-    db.session.add_all([out1, out2, out3])
-
-    account = UserAccount(username="test", password="pass")
+    account = UserAccount(username="user", password="user")
 
     player:Player = Player(user_account=account)
-    player.outfits.append(out1)
-    player.outfits.append(out2)
-
-    player.levels.append(lev1)
-    player.levels.append(lev2)
-
-    print(player.outfits)
-
-    account2 = UserAccount(username="test2", password="pass")
-
-    player2:Player = Player(user_account=account2)
-    player2.levels.append(lev1)
     
-    db.session.add_all([account, player, account2, player2])
-
-    a1:UserAccount = UserAccount.query.filter_by(username="test").first()
-    print(a1)
-
-    print(a1.player)
-
-    run1 = Run(points=12, coins=20, level_id=lev1.id)
-    run2 = Run(points=120, coins=120, level_id=lev1.id)
-    run3 = Run(points=192, coins=920, level_id=lev3.id)
-
-    db.session.add_all([run1, run2, run3])
-
-    player.runs.append(run1)
-    player2.runs.append(run2)
-    player2.runs.append(run3)
-
-    print(player.runs)
+    db.session.add_all([account, player])
 
     db.session.commit()
 
     print(player.outfits)
-    
-    best:Run = None
-    r:Run = None
-
-    for r in Run.query.all():
-        if r is not None and (best is None or r.points > best.points):
-            best = r
-
-    print(best)

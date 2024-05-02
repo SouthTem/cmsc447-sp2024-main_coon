@@ -21,7 +21,7 @@ class LevelComplete extends Phaser.Scene
     {
         let centerX = config.width / 2;
         let centerY = config.height / 2;
-        this.cameras.main.setBackgroundColor(0xff0000);
+        this.cameras.main.setBackgroundColor(0x00ff00);
 
         this.add.image(centerX, centerY, 'background').setAlpha(0.5);
 

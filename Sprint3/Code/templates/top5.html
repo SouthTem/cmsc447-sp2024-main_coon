@@ -16,7 +16,7 @@
             <th>Points</th>
             <th>Coins</th>
         </tr>
-        {% for row in data %}
+        {% for row in data[0:(5, data|length)|min] %}
         <tr>
             <th>{{ row[0] }}</th>
             <th>{{ row[1] }}</th>
