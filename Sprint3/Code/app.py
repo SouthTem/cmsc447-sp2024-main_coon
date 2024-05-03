@@ -6,11 +6,13 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
 from sqlalchemy_utils import database_exists
 import requests
 import json
+import pathlib
 
 
 default_error_message = "Something has gone wrong. Is the URL incorrect?"
 
-app = Flask(__name__)
+# instance_path ensures that instance/database.db is in the right folder
+app = Flask(__name__, instance_path=pathlib.Path(__file__).parent.joinpath('instance'))
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 
 # this is supposed to be a secret, but since we are just locally hosting it should be fine
