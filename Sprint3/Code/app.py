@@ -12,7 +12,8 @@ import pathlib
 default_error_message = "Something has gone wrong. Is the URL incorrect?"
 
 # instance_path ensures that instance/database.db is in the right folder
-app = Flask(__name__, instance_path=pathlib.Path(__file__).parent.joinpath('instance'))
+database_path = pathlib.Path(__file__).parent.joinpath('instance')
+app = Flask(__name__, instance_path=database_path)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 
 # this is supposed to be a secret, but since we are just locally hosting it should be fine
@@ -389,7 +390,7 @@ def populate_database():
 
 @app.route('/')
 def index():
-    if database_exists(f"sqlite:///instance/database.db"):
+    if database_exists(database.db.engine.url):
         return render_template("index.html")
     database.setup()
     return render_template("index.html")
