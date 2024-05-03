@@ -8,7 +8,7 @@ Use other versions with caution
 Install `virtualenv`  
   
 Create a virtual environment:
-`virtualenv env`
+`virtualenv env` or `py -m venv env`
 
 Activate env:
 `env/Scripts/activate`
